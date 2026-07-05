@@ -477,10 +477,10 @@ export default function App() {
                 <div className="xl:hidden mb-4">
                   <button
                     onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
-                    className="w-full bg-editorial-ink text-white py-3 text-xs font-mono font-bold uppercase tracking-widest flex items-center justify-center gap-2 rounded-none touch-target"
+                    className="w-full bg-editorial-ink text-white py-3 text-xs font-mono font-bold uppercase tracking-[0.15em] flex items-center justify-center gap-2 rounded-none touch-target"
                   >
-                    <Filter className="h-4 w-4" />
-                    {isMobileFiltersOpen ? 'Hide Filters' : 'Show Filters'}
+                    <Filter className="h-4 w-4 -ml-1" />
+                    <span className="translate-x-[0.075em]">{isMobileFiltersOpen ? 'Hide Filters' : 'Show Filters'}</span>
                   </button>
                 </div>
                 <aside className={`${isMobileFiltersOpen ? 'block' : 'hidden'} xl:block bg-white border border-editorial-line rounded-none p-5 sticky top-24 mb-6 xl:mb-0`}>

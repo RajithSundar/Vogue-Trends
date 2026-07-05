@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Heart, Star, Sparkles, ShoppingBag, Send, MessageSquare } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useDragControls } from 'motion/react';
 
 export default function ProductDetailModal({
   product,
@@ -23,35 +23,8 @@ export default function ProductDetailModal({
   const [reviewError, setReviewError] = useState('');
   const [reviewSuccess, setReviewSuccess] = useState('');
 
-  // Pull-to-dismiss state
-  const [pullDownY, setPullDownY] = useState(0);
-  const touchStartY = React.useRef(0);
-  const isAtTop = React.useRef(true);
-  const scrollRef = React.useRef(null);
-
-  const handleTouchStart = (e) => {
-    if (!scrollRef.current) return;
-    touchStartY.current = e.touches[0].clientY;
-    isAtTop.current = scrollRef.current.scrollTop <= 0;
-  };
-
-  const handleTouchMove = (e) => {
-    if (!isAtTop.current) return;
-    const touchY = e.touches[0].clientY;
-    const deltaY = touchY - touchStartY.current;
-    if (deltaY > 0) {
-      setPullDownY(deltaY * 0.4);
-    } else {
-      setPullDownY(0);
-    }
-  };
-
-  const handleTouchEnd = () => {
-    if (pullDownY > 80) {
-      onClose();
-    }
-    setPullDownY(0);
-  };
+  // Pull-to-dismiss via Framer Motion drag physics
+  const dragControls = useDragControls();
 
   // Fetch reviews from MERN server
   const fetchReviews = async () => {
@@ -81,8 +54,6 @@ export default function ProductDetailModal({
       return () => clearTimeout(timer);
     }
   }, [product, onTrackView]);
-
-  if (!product) return null;
 
   const handleAddToCart = () => {
     setIsAdding(true);
@@ -136,22 +107,35 @@ export default function ProductDetailModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-end xl:items-center justify-center overflow-hidden bg-black/60 xl:px-4 xl:py-6 backdrop-blur-xs">
-        {/* Background Click Close */}
-        <div className="absolute inset-0 cursor-pointer" onClick={onClose} />
-
-        {/* Modal Container */}
+      {product && (
         <motion.div
-          ref={scrollRef}
-          initial={{ opacity: 0, y: '100%' }}
-          animate={{ opacity: 1, y: pullDownY }}
-          exit={{ opacity: 0, y: '100%' }}
-          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          className="relative z-10 w-full h-[85dvh] xl:h-auto xl:max-h-[92vh] max-w-4xl rounded-t-2xl xl:rounded-none border-t xl:border border-editorial-line bg-white shadow-none overflow-y-auto xl:overflow-hidden flex flex-col xl:flex-row"
+          key="product-modal-backdrop"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-end xl:items-center justify-center overflow-hidden bg-black/60 xl:px-4 xl:py-6 backdrop-blur-xs"
         >
+          {/* Background Click Close */}
+          <div className="absolute inset-0 cursor-pointer" onClick={onClose} />
+
+          {/* Modal Container */}
+          <motion.div
+            initial={{ opacity: 0, y: '100%' }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            drag="y"
+            dragListener={false}
+            dragControls={dragControls}
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={0.4}
+            onDragEnd={(e, info) => {
+              if (info.offset.y > 100 || info.velocity.y > 500) {
+                onClose();
+              }
+            }}
+            className="relative z-10 w-full h-[85dvh] xl:h-auto xl:max-h-[92vh] max-w-4xl rounded-t-2xl xl:rounded-none border-t xl:border border-editorial-line bg-white shadow-none overflow-y-auto xl:overflow-hidden flex flex-col xl:flex-row"
+          >
           {/* Close button */}
           <button
             onClick={onClose}
@@ -161,7 +145,13 @@ export default function ProductDetailModal({
           </button>
 
           {/* Left Column: Image */}
-          <div className="xl:w-1/2 relative bg-stone-100 shrink-0 h-[50dvh] xl:h-auto">
+          <div 
+            className="xl:w-1/2 relative bg-stone-100 shrink-0 h-[50dvh] xl:h-auto touch-none"
+            onPointerDown={(e) => dragControls.start(e)}
+          >
+            {/* Mobile Drag Indicator Handle */}
+            <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-black/20 rounded-full z-20 xl:hidden pointer-events-none" />
+            
             <img
               src={product.imageUrl}
               alt={product.name}
@@ -390,7 +380,8 @@ export default function ProductDetailModal({
             </div>
           </div>
         </motion.div>
-      </div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }
