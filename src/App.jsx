@@ -8,7 +8,52 @@ import CartDrawer from './components/CartDrawer.jsx';
 import TrendSection from './components/TrendSection.jsx';
 import AuthModal from './components/AuthModal.jsx';
 import AdminPanel from './components/AdminPanel.jsx';
+import ThreeDCarousel from './components/ThreeDCarousel.jsx';
+import ImageMarquee from './components/ImageMarquee.jsx';
+import AnimatedButton from './components/AnimatedButton.jsx';
 import { motion, AnimatePresence } from 'motion/react';
+
+const carouselItems = [
+  {
+    id: 1,
+    title: "Organic Linens & Textured Suede",
+    brand: "Seasonal Edit",
+    description: "Curated tailored edits with premium organic fibers, grounding pigments, and structured drape overlays.",
+    tags: ["Sustainable", "Premium", "Minimalist"],
+    imageUrl: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=1200&auto=format&fit=crop&q=80",
+    link: "#",
+    styleVibe: "Minimalist"
+  },
+  {
+    id: 2,
+    title: "Urban Utility & Techwear",
+    brand: "Streetwear",
+    description: "High-performance fabrics meeting avant-garde silhouettes for the modern cityscape.",
+    tags: ["Techwear", "Utility", "Urban"],
+    imageUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200&auto=format&fit=crop&q=80",
+    link: "#",
+    styleVibe: "Streetwear"
+  },
+  {
+    id: 3,
+    title: "Timeless Tailoring",
+    brand: "Classic Elegant",
+    description: "Sartorial excellence with sharp lines, muted tones, and perfect proportions.",
+    tags: ["Tailored", "Classic", "Elegant"],
+    imageUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&auto=format&fit=crop&q=80",
+    link: "#",
+    styleVibe: "Classic Elegant"
+  }
+];
+
+const marqueeItems = [
+  { id: "1", src: "https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg", alt: "Adidas", link: "#" },
+  { id: "2", src: "https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg", alt: "Nike", link: "#" },
+  { id: "3", src: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Prada-Logo.svg", alt: "Prada", link: "#" },
+  { id: "4", src: "https://upload.wikimedia.org/wikipedia/commons/c/c5/Gucci_logo.svg", alt: "Gucci", link: "#" },
+  { id: "5", src: "https://upload.wikimedia.org/wikipedia/commons/f/fd/Zara_Logo.svg", alt: "Zara", link: "#" },
+  { id: "6", src: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Chanel_logo.svg", alt: "Chanel", link: "#" },
+];
 
 export default function App() {
   // Navigation & Cart States
@@ -404,68 +449,56 @@ export default function App() {
         {activeTab === 'shop' && (
           <div className="space-y-8">
             
-            {/* Elegant Hero Banner */}
-            <div className="relative rounded-none overflow-hidden bg-editorial-ink text-[#F9F8F6] p-8 sm:p-12 flex flex-col xl:flex-row justify-between items-center gap-6">
-              <div className="absolute inset-0 opacity-15">
-                <img
-                  src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=1200&auto=format&fit=crop&q=80"
-                  alt="Fashion background"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="relative max-w-lg space-y-4">
-                <span className="inline-flex items-center gap-1.5 text-[10px] font-mono tracking-widest text-[#D2B48C] uppercase">
-                  <Flame className="h-3.5 w-3.5 fill-[#D2B48C]" /> Seasonal Edit
-                </span>
-                <h1 className="font-serif text-2xl sm:text-3xl xl:text-5xl font-normal italic tracking-tight leading-tight">
-                  Organic Linens & Textured Suede
-                </h1>
-                <p className="text-xs text-stone-300 leading-relaxed font-sans">
-                  Curated tailored edits with premium organic fibers, grounding pigments, and structured drape overlays.
-                </p>
-                <div className="pt-2">
-                  <button
-                    onClick={() => setActiveTab('trends')}
-                    className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest font-semibold text-white hover:text-editorial-accent transition-colors"
-                  >
-                    Explore Forecast Board <ArrowRight className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              </div>
+            {/* Elegant Hero Banner - Replaced with Lightswind 3D Carousel */}
+            <div className="w-full -mx-4 sm:-mx-6 lg:-mx-8">
+              <ThreeDCarousel 
+                items={carouselItems}
+                autoRotate={true}
+                rotateInterval={5000}
+                cardHeight={480}
+                onExplore={(item) => {
+                  handleSelectTrendStyle(item.styleVibe);
+                  window.scrollTo({ top: 800, behavior: 'smooth' });
+                }}
+              />
+              <ImageMarquee items={marqueeItems} speed={60} />
+            </div>
 
-              {/* Quick info cards for the user style profile */}
-              <div className="relative bg-white/5 backdrop-blur-sm p-6 rounded-none border border-white/10 w-full xl:w-80 space-y-4">
-                <div className="flex items-center gap-1.5 text-[#D2B48C]">
-                  <Sparkles className="h-3.5 w-3.5 fill-[#D2B48C]" />
-                  <span className="text-[10px] font-semibold uppercase tracking-wider font-mono">Personalizer Active</span>
+            {/* Quick info cards for the user style profile */}
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+              <div className="relative bg-white p-6 border border-editorial-line space-y-4 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+                <div className="flex-1 space-y-2">
+                  <div className="flex items-center gap-1.5 text-editorial-accent">
+                    <Sparkles className="h-4 w-4 fill-editorial-accent" />
+                    <span className="text-[10px] font-semibold uppercase tracking-wider font-mono">Personalizer Active</span>
+                  </div>
+                  {preferredStyle ? (
+                    <div>
+                      <p className="text-base font-serif italic text-editorial-ink">
+                        {preferredStyle} Aesthetic
+                      </p>
+                      <p className="text-[10px] text-editorial-text font-mono mt-1">
+                        Decorating catalog items with custom <span className="text-editorial-ink font-bold">Style Match</span> tags.
+                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className="text-xs text-editorial-text leading-normal">
+                        Stylist is currently idle. Click and view products to activate personalized matching tags!
+                      </p>
+                    </div>
+                  )}
                 </div>
-                {preferredStyle ? (
-                  <div className="space-y-1">
-                    <p className="text-xs text-stone-300 leading-normal">
-                      The engine identifies your current favorite style vibe as:
-                    </p>
-                    <p className="text-base font-serif italic text-white mt-1">
-                      {preferredStyle} Aesthetic
-                    </p>
-                    <p className="text-[10px] text-stone-400 font-mono">
-                      Decorating catalog items with custom <span className="text-white">Style Match</span> tags.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-1">
-                    <p className="text-xs text-stone-300 leading-normal">
-                      Stylist is currently idle. Click and view products to activate personalized matching tags!
-                    </p>
-                  </div>
-                )}
                 
-                <button
+                <AnimatedButton
                   onClick={() => setActiveTab('stylist')}
-                  className="w-full bg-[#F9F8F6] text-editorial-ink py-3 rounded-none text-[10px] font-mono font-bold tracking-widest uppercase hover:bg-white transition-colors touch-target"
+                  variant="dark"
+                  icon="arrow"
+                  fullWidth={false}
+                  className="w-full md:w-auto shrink-0 shadow-md"
                 >
                   Consult AI Stylist
-                </button>
+                </AnimatedButton>
               </div>
             </div>
 
