@@ -165,7 +165,7 @@ export default function AuthModal({ isOpen, onClose, token, user, onLogin, onLog
               </div>
               <button
                 onClick={onClose}
-                className="p-1 rounded-none border border-editorial-line text-stone-400 hover:text-editorial-ink hover:bg-stone-50"
+                className="p-1 rounded-none border border-editorial-line text-stone-400 hover:text-editorial-ink hover:bg-stone-50 relative before:absolute before:-inset-3 before:content-['']"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -339,7 +339,7 @@ export default function AuthModal({ isOpen, onClose, token, user, onLogin, onLog
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="e.g. Christian Dior"
-                            className="w-full rounded-none border border-editorial-line bg-white py-2.5 pl-9 pr-4 text-xs outline-none focus:border-editorial-ink"
+                            className="w-full rounded-none border border-editorial-line bg-white py-2.5 pl-9 pr-4 text-base sm:text-xs outline-none focus:border-editorial-ink"
                           />
                         </div>
                       </div>
@@ -357,7 +357,7 @@ export default function AuthModal({ isOpen, onClose, token, user, onLogin, onLog
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="e.g. user"
-                          className="w-full rounded-none border border-editorial-line bg-white py-2.5 pl-9 pr-4 text-xs outline-none focus:border-editorial-ink"
+                          className="w-full rounded-none border border-editorial-line bg-white py-2.5 pl-9 pr-4 text-base sm:text-xs outline-none focus:border-editorial-ink"
                         />
                       </div>
                     </div>
@@ -374,7 +374,7 @@ export default function AuthModal({ isOpen, onClose, token, user, onLogin, onLog
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="••••••••"
-                          className="w-full rounded-none border border-editorial-line bg-white py-2.5 pl-9 pr-4 text-xs outline-none focus:border-editorial-ink"
+                          className="w-full rounded-none border border-editorial-line bg-white py-2.5 pl-9 pr-4 text-base sm:text-xs outline-none focus:border-editorial-ink"
                         />
                       </div>
                     </div>

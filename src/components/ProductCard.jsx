@@ -26,6 +26,7 @@ export default function ProductCard({
           src={product.imageUrl}
           alt={product.name}
           referrerPolicy="no-referrer"
+          loading="lazy"
           className="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
         />
 
@@ -38,7 +39,7 @@ export default function ProductCard({
             e.stopPropagation();
             toggleWishlist(product.id);
           }}
-          className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-none bg-white border border-editorial-line transition-colors hover:bg-editorial-bg text-stone-700"
+          className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-none bg-white border border-editorial-line transition-colors hover:bg-editorial-bg text-stone-700 before:absolute before:-inset-3 before:content-['']"
         >
           <Heart
             className={`h-3.5 w-3.5 transition-all ${
@@ -111,7 +112,7 @@ export default function ProductCard({
         {/* Trigger button */}
         <button
           onClick={() => onViewDetails(product)}
-          className="mt-2 sm:mt-4 w-full rounded-none bg-editorial-ink text-white py-1.5 sm:py-2.5 text-center text-[10px] sm:text-xs font-bold tracking-widest uppercase transition-all hover:bg-editorial-accent"
+          className="mt-auto min-h-[44px] w-full rounded-none bg-editorial-ink text-white py-1.5 sm:py-2.5 text-center text-[10px] sm:text-xs font-bold tracking-widest uppercase transition-all hover:bg-editorial-accent"
         >
           View Selection
         </button>

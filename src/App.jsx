@@ -413,7 +413,7 @@ export default function App() {
                 <span className="inline-flex items-center gap-1.5 text-[10px] font-mono tracking-widest text-[#D2B48C] uppercase">
                   <Flame className="h-3.5 w-3.5 fill-[#D2B48C]" /> Seasonal Edit
                 </span>
-                <h1 className="font-serif text-3xl sm:text-5xl font-normal italic tracking-tight leading-tight">
+                <h1 className="font-serif text-2xl sm:text-3xl md:text-5xl font-normal italic tracking-tight leading-tight">
                   Organic Linens & Textured Suede
                 </h1>
                 <p className="text-xs text-stone-300 leading-relaxed font-sans">
@@ -457,7 +457,7 @@ export default function App() {
                 
                 <button
                   onClick={() => setActiveTab('stylist')}
-                  className="w-full bg-[#F9F8F6] text-editorial-ink py-2.5 rounded-none text-[10px] font-mono font-bold tracking-widest uppercase hover:bg-white transition-colors"
+                  className="w-full bg-[#F9F8F6] text-editorial-ink py-3 rounded-none text-[10px] font-mono font-bold tracking-widest uppercase hover:bg-white transition-colors touch-target"
                 >
                   Consult AI Stylist
                 </button>
@@ -472,7 +472,7 @@ export default function App() {
                 <div className="lg:hidden mb-4">
                   <button
                     onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
-                    className="w-full bg-editorial-ink text-white py-3 text-xs font-mono font-bold uppercase tracking-widest flex items-center justify-center gap-2 rounded-none"
+                    className="w-full bg-editorial-ink text-white py-3 text-xs font-mono font-bold uppercase tracking-widest flex items-center justify-center gap-2 rounded-none touch-target"
                   >
                     <Filter className="h-4 w-4" />
                     {isMobileFiltersOpen ? 'Hide Filters' : 'Show Filters'}
@@ -630,7 +630,7 @@ export default function App() {
                     </button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-6">
+                  <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-6">
                     <AnimatePresence>
                       {filteredProducts.map((p) => (
                         <ProductCard

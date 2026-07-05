@@ -296,7 +296,7 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
                   </div>
 
                   {/* Shipping info */}
-                  <div className="bg-[#F9F8F6] p-2.5 text-xs grid grid-cols-2 gap-2 border border-editorial-line">
+                  <div className="bg-[#F9F8F6] p-2.5 text-xs grid grid-cols-1 sm:grid-cols-2 gap-2 border border-editorial-line">
                     <div>
                       <span className="text-[9px] text-stone-400 font-mono uppercase block">Recipient</span>
                       <span className="font-semibold text-editorial-ink">{order.shippingAddress.name}</span>
@@ -379,11 +379,11 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
                   placeholder="e.g. Linen Blend Blazer"
                   value={newProduct.name}
                   onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-                  className="w-full rounded-none border border-editorial-line bg-white p-2 text-xs outline-none focus:border-editorial-ink"
+                  className="w-full rounded-none border border-editorial-line bg-white p-2.5 text-base sm:text-xs outline-none focus:border-editorial-ink"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-[9px] font-mono uppercase text-stone-400 mb-1">Unit Price ($)</label>
                   <input
@@ -392,7 +392,7 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
                     min="1"
                     value={newProduct.price}
                     onChange={(e) => setNewProduct({ ...newProduct, price: Number(e.target.value) })}
-                    className="w-full rounded-none border border-editorial-line bg-white p-2 text-xs outline-none focus:border-editorial-ink"
+                    className="w-full rounded-none border border-editorial-line bg-white p-2.5 text-base sm:text-xs outline-none focus:border-editorial-ink"
                   />
                 </div>
                 <div>
@@ -403,7 +403,7 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
                     min="0"
                     value={newProduct.stock}
                     onChange={(e) => setNewProduct({ ...newProduct, stock: Number(e.target.value) })}
-                    className="w-full rounded-none border border-editorial-line bg-white p-2 text-xs outline-none focus:border-editorial-ink"
+                    className="w-full rounded-none border border-editorial-line bg-white p-2.5 text-base sm:text-xs outline-none focus:border-editorial-ink"
                   />
                 </div>
               </div>
@@ -413,7 +413,7 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
                 <select
                   value={newProduct.category}
                   onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-                  className="w-full rounded-none border border-editorial-line bg-white p-2 text-xs outline-none focus:border-editorial-ink font-mono"
+                  className="w-full rounded-none border border-editorial-line bg-white p-2.5 text-base sm:text-xs outline-none focus:border-editorial-ink font-mono"
                 >
                   <option value="Tops">Tops</option>
                   <option value="Bottoms">Bottoms</option>
@@ -423,13 +423,13 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-[9px] font-mono uppercase text-stone-400 mb-1">Style Vibe</label>
                   <select
                     value={newProduct.style}
                     onChange={(e) => setNewProduct({ ...newProduct, style: e.target.value })}
-                    className="w-full rounded-none border border-editorial-line bg-white p-2 text-xs outline-none focus:border-editorial-ink font-mono"
+                    className="w-full rounded-none border border-editorial-line bg-white p-2.5 text-base sm:text-xs outline-none focus:border-editorial-ink font-mono"
                   >
                     <option value="Minimalist">Minimalist</option>
                     <option value="Streetwear">Streetwear</option>
@@ -446,12 +446,12 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
                     placeholder="e.g. Sage Green"
                     value={newProduct.color}
                     onChange={(e) => setNewProduct({ ...newProduct, color: e.target.value })}
-                    className="w-full rounded-none border border-editorial-line bg-white p-2 text-xs outline-none focus:border-editorial-ink"
+                    className="w-full rounded-none border border-editorial-line bg-white p-2.5 text-base sm:text-xs outline-none focus:border-editorial-ink"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-[9px] font-mono uppercase text-stone-400 mb-1">Hex Color Code</label>
                   <input
@@ -460,7 +460,7 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
                     placeholder="e.g. #2E4F4F"
                     value={newProduct.colorCode}
                     onChange={(e) => setNewProduct({ ...newProduct, colorCode: e.target.value })}
-                    className="w-full rounded-none border border-editorial-line bg-white p-2 text-xs outline-none focus:border-editorial-ink font-mono"
+                    className="w-full rounded-none border border-editorial-line bg-white p-2.5 text-base sm:text-xs outline-none focus:border-editorial-ink font-mono"
                   />
                 </div>
                 <div>
@@ -470,7 +470,7 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
                     placeholder="tag1, tag2"
                     value={newProduct.tagsString}
                     onChange={(e) => setNewProduct({ ...newProduct, tagsString: e.target.value })}
-                    className="w-full rounded-none border border-editorial-line bg-white p-2 text-xs outline-none"
+                    className="w-full rounded-none border border-editorial-line bg-white p-2.5 text-base sm:text-xs outline-none"
                   />
                 </div>
               </div>
@@ -482,7 +482,7 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
                   placeholder="Fits and fabrics details..."
                   value={newProduct.description}
                   onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-                  className="w-full rounded-none border border-editorial-line bg-white p-2 text-xs outline-none resize-none"
+                  className="w-full rounded-none border border-editorial-line bg-white p-2.5 text-base sm:text-xs outline-none resize-none"
                 />
               </div>
 
@@ -493,7 +493,7 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
                   placeholder="https://unsplash.com/..."
                   value={newProduct.imageUrl}
                   onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })}
-                  className="w-full rounded-none border border-editorial-line bg-white p-2 text-xs outline-none truncate"
+                  className="w-full rounded-none border border-editorial-line bg-white p-2.5 text-base sm:text-xs outline-none truncate"
                 />
               </div>
 

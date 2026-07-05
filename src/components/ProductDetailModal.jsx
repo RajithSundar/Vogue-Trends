@@ -106,22 +106,22 @@ export default function ProductDetailModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 px-4 py-6 backdrop-blur-xs">
+      <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center overflow-hidden bg-black/60 md:px-4 md:py-6 backdrop-blur-xs">
         {/* Background Click Close */}
         <div className="absolute inset-0 cursor-pointer" onClick={onClose} />
 
         {/* Modal Container */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="relative z-10 w-full max-w-4xl rounded-none border border-editorial-line bg-white shadow-none overflow-hidden flex flex-col md:flex-row max-h-[92vh]"
+          initial={{ opacity: 0, y: '100%' }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: '100%' }}
+          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+          className="relative z-10 w-full h-[95dvh] md:h-auto md:max-h-[92vh] max-w-4xl rounded-t-2xl md:rounded-none border-t md:border border-editorial-line bg-white shadow-none overflow-hidden flex flex-col md:flex-row"
         >
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-20 flex h-8 w-8 items-center justify-center rounded-none border border-editorial-line bg-white text-stone-700 transition-colors hover:bg-stone-100"
+            className="absolute top-4 right-4 z-20 flex h-8 w-8 items-center justify-center rounded-none border border-transparent md:border-editorial-line bg-white/80 md:bg-white text-stone-700 transition-colors hover:bg-stone-100 touch-target backdrop-blur-sm md:backdrop-blur-none"
           >
             <X className="h-4 w-4" />
           </button>
@@ -132,6 +132,7 @@ export default function ProductDetailModal({
               src={product.imageUrl}
               alt={product.name}
               referrerPolicy="no-referrer"
+              loading="lazy"
               className="w-full h-full object-cover"
             />
             {/* Soft border styling */}
@@ -139,8 +140,8 @@ export default function ProductDetailModal({
           </div>
 
           {/* Right Column: Information & Reviews list */}
-          <div className="md:w-1/2 p-6 md:p-8 flex flex-col justify-between overflow-y-auto max-h-[90vh] bg-white">
-            <div className="space-y-6">
+          <div className="md:w-1/2 p-5 sm:p-6 md:p-8 flex flex-col justify-between overflow-y-auto h-full bg-white pb-safe">
+            <div className="space-y-5 md:space-y-6">
               
               {/* Category, Vibe and general average stars */}
               <div className="flex items-center justify-between">
@@ -195,12 +196,12 @@ export default function ProductDetailModal({
                     Size Guide
                   </span>
                 </div>
-                <div className="mt-2 flex gap-2">
+                <div className="mt-3 flex gap-2 overflow-x-auto pb-1 hide-scrollbar">
                   {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`flex h-10 w-12 items-center justify-center rounded-none border text-xs font-mono font-semibold tracking-widest transition-all ${
+                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-none border text-xs font-mono font-semibold tracking-widest transition-all ${
                         selectedSize === size
                           ? 'border-editorial-ink bg-editorial-ink text-white'
                           : 'border-editorial-line bg-white text-stone-800 hover:border-editorial-ink'

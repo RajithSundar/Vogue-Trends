@@ -25,6 +25,17 @@ body {
 /* Elegant editorial inputs and buttons */
 input, select, textarea {
   border-radius: 0px !important; /* Editorial design favors crisp flat corners */
+  font-size: 16px; /* Prevent iOS zoom */
+}
+
+/* Invisible touch target pad to reach 44x44px on mobile */
+@media (max-width: 768px) {
+  .touch-target {
+    padding: 12px;
+    margin: -12px; /* offset the padding to maintain visual alignment */
+    position: relative;
+    z-index: 10;
+  }
 }
 
 /* Custom scrollbar for an elegant aesthetic */

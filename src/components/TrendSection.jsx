@@ -91,6 +91,7 @@ export default function TrendSection({ onSelectTrendStyle, setActiveTab }) {
                   src={trend.highlightImageUrl}
                   alt={trend.name}
                   referrerPolicy="no-referrer"
+                  loading="lazy"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                 />
               </div>
@@ -135,7 +136,7 @@ export default function TrendSection({ onSelectTrendStyle, setActiveTab }) {
                 <div className="pt-2">
                   <button
                     onClick={() => handleBrowseTrend(trend.vibe)}
-                    className="inline-flex items-center gap-2 rounded-none bg-editorial-ink px-5 py-3 text-xs font-bold tracking-widest uppercase text-white hover:bg-editorial-accent transition-colors"
+                    className="inline-flex items-center justify-center gap-2 rounded-none bg-editorial-ink px-5 py-3 min-h-[44px] text-xs font-bold tracking-widest uppercase text-white hover:bg-editorial-accent transition-colors"
                   >
                     Browse Coordinated Range
                     <ArrowRight className="h-4 w-4" />

@@ -160,7 +160,7 @@ export default function CartDrawer({
               </div>
               <button
                 onClick={onClose}
-                className="p-1 rounded-none border border-editorial-line text-stone-400 hover:text-editorial-ink hover:bg-stone-50"
+                className="p-1 rounded-none border border-editorial-line text-stone-400 hover:text-editorial-ink hover:bg-stone-50 relative before:absolute before:-inset-3 before:content-['']"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -193,6 +193,7 @@ export default function CartDrawer({
                               src={product.imageUrl}
                               alt={product.name}
                               referrerPolicy="no-referrer"
+                              loading="lazy"
                               className="h-20 w-16 object-cover bg-stone-50 border border-editorial-line flex-shrink-0"
                             />
                             <div className="flex-1 flex flex-col justify-between min-w-0">
@@ -213,14 +214,14 @@ export default function CartDrawer({
                                 <div className="flex items-center border border-editorial-line">
                                   <button
                                     onClick={() => onUpdateQuantity(product.id, selectedSize, quantity - 1)}
-                                    className="px-2 py-0.5 text-xs hover:bg-[#F9F8F6] font-bold"
+                                    className="px-2 py-0.5 text-xs hover:bg-[#F9F8F6] font-bold relative before:absolute before:-inset-2 before:content-['']"
                                   >
                                     -
                                   </button>
                                   <span className="px-2 text-xs font-mono font-medium">{quantity}</span>
                                   <button
                                     onClick={() => onUpdateQuantity(product.id, selectedSize, quantity + 1)}
-                                    className="px-2 py-0.5 text-xs hover:bg-[#F9F8F6] font-bold"
+                                    className="px-2 py-0.5 text-xs hover:bg-[#F9F8F6] font-bold relative before:absolute before:-inset-2 before:content-['']"
                                   >
                                     +
                                   </button>
@@ -228,7 +229,7 @@ export default function CartDrawer({
 
                                 <button
                                   onClick={() => onRemoveItem(product.id, selectedSize)}
-                                  className="text-stone-400 hover:text-red-600 transition-colors"
+                                  className="text-stone-400 hover:text-red-600 transition-colors relative before:absolute before:-inset-3 before:content-['']"
                                 >
                                   <Trash2 className="h-3.5 w-3.5" />
                                 </button>
@@ -240,7 +241,7 @@ export default function CartDrawer({
                     </div>
 
                     {/* Footer Summary */}
-                    <div className="p-6 border-t border-editorial-line bg-[#F9F8F6] space-y-4">
+                    <div className="p-6 pb-8 md:pb-6 border-t border-editorial-line bg-[#F9F8F6] space-y-4">
                       <div className="space-y-1.5 text-xs font-mono">
                         <div className="flex justify-between text-stone-500">
                           <span>Subtotal</span>
@@ -282,7 +283,7 @@ export default function CartDrawer({
 
             {/* CHECKOUT FORM VIEW */}
             {checkoutStep === 'checkout' && (
-              <div className="flex-1 flex flex-col min-h-0 p-6 overflow-y-auto bg-white">
+              <div className="flex-1 flex flex-col min-h-0 p-6 pb-8 md:pb-6 overflow-y-auto bg-white">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-serif text-xl font-normal text-editorial-ink italic">
                     Checkout Details
