@@ -49,15 +49,15 @@ Vogue Trends includes a back-office administration panel to monitor sales KPIs, 
 
 ### How to Access the Admin Panel:
 1.  Click the user icon in the top right menu to open the **Atelier Account Modal**.
-2.  Log in using the following administrative demo credentials:
-    *   **Email:** `admin@vogue.com`
-    *   **Password:** `admin123`
+2.  Log in using the following administrative demo credentials (auto-seeded on startup):
+    *   **Username/Email:** `user`
+    *   **Password:** `user123`
 3.  Once authenticated, a **"Shield" Admin Portal** link will unlock on the navigation rail (desktop menu and mobile icon toolbar).
 
 ### Dashboard Panels:
 *   **📊 Sales Analytics:** Summary widgets tracking Total Revenue, Total Volume Checkouts, Average Ticket Value, and Applied Discounts.
 *   **🚚 Fulfillment Pipeline:** Scrollable ledger displaying database orders. Updating the status dropdown (e.g., *Processing*, *Shipped*, *Delivered*) immediately updates the customer's personal profile card.
-*   **➕ Product Editor:** Form to add new fashion products directly into the live boutique catalog.
+*   **➕ Product Editor:** Interface to add new fashion products, update pricing and stock, and delete items from the live boutique catalog.
 
 ---
 
