@@ -86,6 +86,22 @@ export async function connectDatabase() {
         await MongoProduct.insertMany(productsToInsert);
         console.log('✅ Products seeded successfully.');
       }
+
+      // Ensure Admin user exists
+      const adminExists = await MongoUser.findOne({ email: 'user' });
+      if (!adminExists) {
+        console.log('Seeding admin user...');
+        const crypto = await import('crypto');
+        const passwordHash = crypto.createHash('sha256').update('user123' + 'vogue_salt_key_2026').digest('hex');
+        await MongoUser.create({
+          email: 'user',
+          passwordHash,
+          name: 'Atelier Admin',
+          preferredStyle: 'Classic Elegant'
+        });
+        console.log('✅ Admin user seeded successfully.');
+      }
+
     } catch (err) {
       console.error('❌ MongoDB Connection Failure, falling back to local database file:', err);
       isUsingMongoDB = false;
