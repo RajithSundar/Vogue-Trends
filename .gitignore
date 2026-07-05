@@ -1,6 +1,6 @@
 node_modules/
 build/
-dist/
+# dist/ (Commented out so Vercel gets the built files)
 coverage/
 .DS_Store
 *.log
