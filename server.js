@@ -1,7 +1,6 @@
 import './server/config/env.js'; // Must be first to load env vars before routing imports
 import express from 'express';
 import path from 'path';
-import { createServer as createViteServer } from 'vite';
 
 // Configurations & Imports
 import { connectDatabase, isUsingMongoDB } from './server/config/db.js';
@@ -52,6 +51,7 @@ async function startServer() {
   await connectDatabase();
 
   if (process.env.NODE_ENV !== 'production') {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
