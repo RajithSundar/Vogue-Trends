@@ -23,6 +23,36 @@ export default function ProductDetailModal({
   const [reviewError, setReviewError] = useState('');
   const [reviewSuccess, setReviewSuccess] = useState('');
 
+  // Pull-to-dismiss state
+  const [pullDownY, setPullDownY] = useState(0);
+  const touchStartY = React.useRef(0);
+  const isAtTop = React.useRef(true);
+  const scrollRef = React.useRef(null);
+
+  const handleTouchStart = (e) => {
+    if (!scrollRef.current) return;
+    touchStartY.current = e.touches[0].clientY;
+    isAtTop.current = scrollRef.current.scrollTop <= 0;
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isAtTop.current) return;
+    const touchY = e.touches[0].clientY;
+    const deltaY = touchY - touchStartY.current;
+    if (deltaY > 0) {
+      setPullDownY(deltaY * 0.4);
+    } else {
+      setPullDownY(0);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (pullDownY > 80) {
+      onClose();
+    }
+    setPullDownY(0);
+  };
+
   // Fetch reviews from MERN server
   const fetchReviews = async () => {
     if (!product) return;
@@ -112,10 +142,14 @@ export default function ProductDetailModal({
 
         {/* Modal Container */}
         <motion.div
+          ref={scrollRef}
           initial={{ opacity: 0, y: '100%' }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: pullDownY }}
           exit={{ opacity: 0, y: '100%' }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           className="relative z-10 w-full h-[85dvh] xl:h-auto xl:max-h-[92vh] max-w-4xl rounded-t-2xl xl:rounded-none border-t xl:border border-editorial-line bg-white shadow-none overflow-y-auto xl:overflow-hidden flex flex-col xl:flex-row"
         >
           {/* Close button */}
