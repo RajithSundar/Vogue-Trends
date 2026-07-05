@@ -1,0 +1,151 @@
+{
+  "users": [
+    {
+      "email": "raj@dummy.com",
+      "passwordHash": "4ba9717c9a2cd8049191e4e7f8b3d78a3c6204ae6b67e45166bc50806637b620",
+      "name": "Raj",
+      "preferredStyle": "",
+      "_id": "user_k6fje16ef"
+    }
+  ],
+  "wishlists": [
+    {
+      "_id": "wish_m4sp2hnwr",
+      "userId": "user_k6fje16ef",
+      "productIds": [
+        "prod-11"
+      ]
+    }
+  ],
+  "carts": [
+    {
+      "_id": "cart_5s9767ton",
+      "userId": "user_k6fje16ef",
+      "items": []
+    }
+  ],
+  "orders": [
+    {
+      "items": [
+        {
+          "productId": "prod-3",
+          "name": "French Terry Hoodie",
+          "price": 68,
+          "quantity": 1,
+          "selectedSize": "M",
+          "imageUrl": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&auto=format&fit=crop&q=80"
+        },
+        {
+          "productId": "prod-7",
+          "name": "Japanese Selvedge Denim",
+          "price": 120,
+          "quantity": 1,
+          "selectedSize": "M",
+          "imageUrl": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80"
+        },
+        {
+          "productId": "prod-6",
+          "name": "Relaxed Corduroy Pants",
+          "price": 85,
+          "quantity": 1,
+          "selectedSize": "M",
+          "imageUrl": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&auto=format&fit=crop&q=80"
+        }
+      ],
+      "subtotal": 273,
+      "deliveryFee": 0,
+      "total": 273,
+      "shippingAddress": {
+        "name": "Raj",
+        "email": "raj@dummy.com",
+        "address": "108 Fashion Ave, Suite 400",
+        "city": "New York, NY 10018"
+      },
+      "userId": "user_k6fje16ef",
+      "createdAt": "2026-07-02T15:05:12.265Z",
+      "_id": "order_go5sii81x"
+    },
+    {
+      "items": [
+        {
+          "productId": "prod-3",
+          "name": "French Terry Hoodie",
+          "price": 68,
+          "quantity": 1,
+          "selectedSize": "M",
+          "imageUrl": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&auto=format&fit=crop&q=80"
+        },
+        {
+          "productId": "prod-7",
+          "name": "Japanese Selvedge Denim",
+          "price": 120,
+          "quantity": 1,
+          "selectedSize": "M",
+          "imageUrl": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&auto=format&fit=crop&q=80"
+        },
+        {
+          "productId": "prod-6",
+          "name": "Relaxed Corduroy Pants",
+          "price": 85,
+          "quantity": 1,
+          "selectedSize": "M",
+          "imageUrl": "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600&auto=format&fit=crop&q=80"
+        },
+        {
+          "productId": "prod-17",
+          "name": "Leather Crossbody Tote",
+          "price": 130,
+          "quantity": 1,
+          "selectedSize": "M",
+          "imageUrl": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&auto=format&fit=crop&q=80"
+        },
+        {
+          "productId": "prod-1",
+          "name": "Knit Cotton Tee",
+          "price": 34,
+          "quantity": 1,
+          "selectedSize": "M",
+          "imageUrl": "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=600&auto=format&fit=crop&q=80"
+        }
+      ],
+      "subtotal": 437,
+      "deliveryFee": 0,
+      "total": 350,
+      "shippingAddress": {
+        "name": "Raj",
+        "email": "raj@dummy.com",
+        "address": "108 Fashion Ave, Suite 400",
+        "city": "New York, NY 10018"
+      },
+      "userId": "user_k6fje16ef",
+      "createdAt": "2026-07-05T07:39:06.971Z",
+      "_id": "order_wmduwxtow"
+    }
+  ],
+  "reviews": [
+    {
+      "_id": "rev-default-1",
+      "productId": "prod-1",
+      "name": "Elena Vance",
+      "rating": 5,
+      "comment": "Absolutely love the heavy drape of this tee. Feels incredibly high quality and fits my minimalist style perfectly.",
+      "createdAt": "2026-06-28T14:54:14.752Z"
+    },
+    {
+      "_id": "rev-default-2",
+      "productId": "prod-1",
+      "name": "Marcus K.",
+      "rating": 4,
+      "comment": "Very cozy fabric and clean finish. Color is slightly darker than the photo but still a gorgeous Sage Green.",
+      "createdAt": "2026-06-22T14:54:14.752Z"
+    },
+    {
+      "productId": "prod-1",
+      "name": "Raj",
+      "rating": 5,
+      "comment": "This is a really good tee!",
+      "createdAt": "2026-07-02T15:03:32.854Z",
+      "_id": "rev_exw1sh2st"
+    }
+  ]
+}

@@ -1,0 +1,247 @@
+import React, { useState } from 'react';
+import { ShoppingBag, Heart, Sparkles, Search, TrendingUp, User, Shield } from 'lucide-react';
+
+export default function Navbar({
+  activeTab,
+  setActiveTab,
+  cartCount,
+  wishlistCount,
+  openCart,
+  browsingCount,
+  searchQuery,
+  setSearchQuery,
+  user,
+  onOpenAuth,
+}) {
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  // Determine AI learning status based on browsing count
+  const getAiLearningStatus = () => {
+    if (browsingCount === 0) {
+      return { label: 'AI Idle', color: 'bg-zinc-300 text-zinc-700', percentage: 0 };
+    }
+    if (browsingCount < 3) {
+      return { label: 'AI Learning', color: 'bg-amber-100 text-amber-800 animate-pulse', percentage: Math.min(30 * browsingCount, 90) };
+    }
+    return { label: 'AI Personalized', color: 'bg-emerald-100 text-emerald-800 font-medium', percentage: 100 };
+  };
+
+  const status = getAiLearningStatus();
+
+  return (
+    <header className="sticky top-0 z-40 w-full border-b border-editorial-line bg-editorial-bg/95 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        
+        {/* Logo and Brand */}
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab('shop')}>
+          <span className="font-serif italic text-2xl font-bold tracking-tight text-editorial-ink">
+            VOGUE<span className="font-sans not-italic text-xs font-semibold uppercase tracking-widest text-editorial-accent pl-1">.trends</span>
+          </span>
+        </div>
+
+        {/* Navigation links */}
+        <nav className="hidden md:flex space-x-2">
+          <button
+            onClick={() => setActiveTab('shop')}
+            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 ${
+              activeTab === 'shop'
+                ? 'bg-editorial-ink text-white'
+                : 'text-stone-600 hover:bg-stone-100 hover:text-editorial-ink'
+            }`}
+          >
+            <ShoppingBag className="h-3.5 w-3.5" />
+            Discover Shop
+          </button>
+          
+          <button
+            onClick={() => setActiveTab('stylist')}
+            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 relative ${
+              activeTab === 'stylist'
+                ? 'bg-editorial-ink text-white'
+                : 'text-stone-600 hover:bg-stone-100 hover:text-editorial-ink'
+            }`}
+          >
+            <Sparkles className="h-3.5 w-3.5 text-editorial-accent fill-editorial-accent" />
+            AI Stylist
+            {browsingCount > 0 && activeTab !== 'stylist' && (
+              <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-editorial-accent opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-editorial-accent"></span>
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('trends')}
+            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 ${
+              activeTab === 'trends'
+                ? 'bg-editorial-ink text-white'
+                : 'text-stone-600 hover:bg-stone-100 hover:text-editorial-ink'
+            }`}
+          >
+            <TrendingUp className="h-3.5 w-3.5" />
+            Trend Board
+          </button>
+
+          {user?.email === 'admin@vogue.com' && (
+            <button
+              onClick={() => setActiveTab('admin')}
+              className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 ${
+                activeTab === 'admin'
+                  ? 'bg-[#8B4513] text-white'
+                  : 'text-[#8B4513] hover:bg-stone-100 hover:text-[#8B4513]'
+              }`}
+            >
+              <Shield className="h-3.5 w-3.5" />
+              Admin Portal
+            </button>
+          )}
+        </nav>
+
+        {/* Search Bar */}
+        <div className="relative max-w-xs flex-1 hidden sm:block mx-4">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+            <Search className="h-4 w-4 text-stone-400" />
+          </div>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search linen, earthy, outerwear..."
+            className="w-full rounded-none border border-editorial-line bg-white py-1.5 pl-9 pr-4 text-xs text-editorial-ink outline-none transition-all focus:border-editorial-ink focus:ring-1 focus:ring-editorial-ink"
+          />
+        </div>
+
+        {/* Action icons & AI Status */}
+        <div className="flex items-center gap-4">
+          
+          {/* AI engine feedback pill */}
+          <div className="flex flex-col items-end hidden lg:flex">
+            <div className="flex items-center gap-1.5">
+              <span className={`text-[9px] font-mono tracking-widest uppercase px-2.5 py-1 font-semibold ${
+                browsingCount === 0 
+                  ? 'bg-stone-200 text-stone-700' 
+                  : 'bg-editorial-ink text-white'
+              }`}>
+                {status.label}
+              </span>
+            </div>
+            {browsingCount > 0 && (
+              <span className="text-[9px] text-editorial-muted mt-0.5 font-mono">
+                Learning progress: {status.percentage}%
+              </span>
+            )}
+          </div>
+
+          {/* Mobile Trend tab icon */}
+          <button
+            onClick={() => setActiveTab('trends')}
+            className={`p-2 rounded-none md:hidden transition-colors ${
+              activeTab === 'trends' ? 'bg-stone-200 text-editorial-ink' : 'text-stone-600'
+            }`}
+            title="Trend Board"
+          >
+            <TrendingUp className="h-5 w-5" />
+          </button>
+
+          {/* Mobile Stylist tab icon */}
+          <button
+            onClick={() => setActiveTab('stylist')}
+            className={`p-2 rounded-none md:hidden transition-colors relative ${
+              activeTab === 'stylist' ? 'bg-stone-200 text-editorial-ink' : 'text-stone-600'
+            }`}
+            title="AI Stylist"
+          >
+            <Sparkles className="h-5 w-5 text-editorial-accent" />
+            {browsingCount > 0 && (
+              <span className="absolute top-1 right-1 h-1.5 w-1.5 bg-editorial-accent rounded-full animate-pulse"></span>
+            )}
+          </button>
+
+          {/* Mobile Admin tab icon */}
+          {user?.email === 'admin@vogue.com' && (
+            <button
+              onClick={() => setActiveTab('admin')}
+              className={`p-2 rounded-none md:hidden transition-colors ${
+                activeTab === 'admin' ? 'bg-stone-200 text-editorial-ink' : 'text-[#8B4513]'
+              }`}
+              title="Admin Portal"
+            >
+              <Shield className="h-5 w-5" />
+            </button>
+          )}
+
+          {/* Mobile Search Toggle Button */}
+          <button
+            onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+            className="p-2 rounded-none sm:hidden text-stone-600 hover:text-editorial-ink transition-colors"
+            title="Search"
+          >
+            <Search className="h-5 w-5" />
+          </button>
+
+          {/* Wishlist Button */}
+          <button
+            onClick={() => setActiveTab('shop')} // Direct to shop listings
+            className="relative p-2 text-stone-600 hover:text-editorial-ink transition-colors"
+            title="Wishlist"
+          >
+            <Heart className="h-5 w-5" />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center bg-editorial-accent text-[9px] font-bold text-white">
+                {wishlistCount}
+              </span>
+            )}
+          </button>
+
+          {/* Cart Trigger */}
+          <button
+            onClick={openCart}
+            className="relative p-2 text-stone-600 hover:text-editorial-ink transition-colors"
+            title="Shopping Cart"
+          >
+            <ShoppingBag className="h-5 w-5" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center bg-editorial-ink text-[9px] font-bold text-white">
+                {cartCount}
+              </span>
+            )}
+          </button>
+
+          {/* User Profile Account Trigger */}
+          <button
+            onClick={onOpenAuth}
+            className="flex items-center gap-1.5 p-2 text-stone-600 hover:text-editorial-ink transition-colors"
+            title={user ? `Atelier Profile (${user.name})` : "Sign In / Register"}
+          >
+            <User className="h-5 w-5" />
+            {user && (
+              <span className="hidden lg:inline text-[10px] font-mono uppercase tracking-widest font-semibold text-editorial-ink max-w-[80px] truncate">
+                {user.name.split(' ')[0]}
+              </span>
+            )}
+          </button>
+
+        </div>
+
+      </div>
+
+      {isMobileSearchOpen && (
+        <div className="sm:hidden border-t border-editorial-line bg-white px-4 py-3 shadow-inner">
+          <div className="relative">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <Search className="h-4 w-4 text-stone-400" />
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search linen, earthy, outerwear..."
+              className="w-full rounded-none border border-editorial-line bg-stone-50 py-2 pl-9 pr-4 text-xs text-editorial-ink outline-none"
+              autoFocus
+            />
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}

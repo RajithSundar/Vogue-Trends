@@ -1,0 +1,6 @@
+{
+  "name": "Vogue Trends",
+  "description": "A highly personalized fashion shopping platform with an AI personalization engine that crafts custom outfit suggestions and trend recommendations based on your browsing patterns.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

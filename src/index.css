@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-editorial-bg: #F9F8F6;
+  --color-editorial-ink: #141414;
+  --color-editorial-muted: #666666;
+  --color-editorial-accent: #8B4513;
+  --color-editorial-line: #E5E5E2;
+}
+
+/* Custom visual styling to give the app a premium editorial boutique feel */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-editorial-bg);
+  color: var(--color-editorial-ink);
+  overflow-x: hidden;
+}
+
+/* Elegant editorial inputs and buttons */
+input, select, textarea {
+  border-radius: 0px !important; /* Editorial design favors crisp flat corners */
+}
+
+/* Custom scrollbar for an elegant aesthetic */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F9F8F6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #141414;
+}
+
