@@ -62,7 +62,7 @@ export default function ProductCard({
       </div>
 
       {/* Product Information */}
-      <div className="flex flex-1 flex-col p-4 bg-transparent">
+      <div className="flex flex-1 flex-col p-2 sm:p-4 bg-transparent">
         <div className="flex items-center justify-between gap-1 mb-1">
           {/* Style Vibe */}
           <span className="text-[10px] font-mono text-editorial-muted tracking-wider uppercase">
@@ -76,7 +76,7 @@ export default function ProductCard({
         </div>
 
         {/* Product Name */}
-        <h3 className="font-serif text-lg font-normal text-editorial-ink group-hover:text-editorial-accent transition-colors line-clamp-1">
+        <h3 className="font-serif text-sm sm:text-lg font-normal text-editorial-ink group-hover:text-editorial-accent transition-colors line-clamp-1">
           {product.name}
         </h3>
 
@@ -91,13 +91,13 @@ export default function ProductCard({
             <span className="text-xs text-stone-500 truncate max-w-[100px]">{product.color}</span>
           </div>
           {/* Price */}
-          <span className="font-serif text-base font-bold text-editorial-accent">
+          <span className="font-serif text-sm sm:text-base font-bold text-editorial-accent">
             ${product.price}.00
           </span>
         </div>
 
         {/* Tags brief */}
-        <div className="mt-2.5 flex flex-wrap gap-1">
+        <div className="mt-2.5 hidden sm:flex flex-wrap gap-1">
           {product.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
@@ -111,7 +111,7 @@ export default function ProductCard({
         {/* Trigger button */}
         <button
           onClick={() => onViewDetails(product)}
-          className="mt-4 w-full rounded-none bg-editorial-ink text-white py-2.5 text-center text-xs font-bold tracking-widest uppercase transition-all hover:bg-editorial-accent"
+          className="mt-2 sm:mt-4 w-full rounded-none bg-editorial-ink text-white py-1.5 sm:py-2.5 text-center text-[10px] sm:text-xs font-bold tracking-widest uppercase transition-all hover:bg-editorial-accent"
         >
           View Selection
         </button>

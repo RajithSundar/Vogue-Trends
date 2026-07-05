@@ -112,7 +112,7 @@ export default function Navbar({
         </div>
 
         {/* Action icons & AI Status */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-1 sm:gap-4">
           
           {/* AI engine feedback pill */}
           <div className="flex flex-col items-end hidden lg:flex">
@@ -135,7 +135,7 @@ export default function Navbar({
           {/* Mobile Trend tab icon */}
           <button
             onClick={() => setActiveTab('trends')}
-            className={`p-2 rounded-none md:hidden transition-colors ${
+            className={`p-1.5 sm:p-2 rounded-none md:hidden transition-colors ${
               activeTab === 'trends' ? 'bg-stone-200 text-editorial-ink' : 'text-stone-600'
             }`}
             title="Trend Board"
@@ -146,7 +146,7 @@ export default function Navbar({
           {/* Mobile Stylist tab icon */}
           <button
             onClick={() => setActiveTab('stylist')}
-            className={`p-2 rounded-none md:hidden transition-colors relative ${
+            className={`p-1.5 sm:p-2 rounded-none md:hidden transition-colors relative ${
               activeTab === 'stylist' ? 'bg-stone-200 text-editorial-ink' : 'text-stone-600'
             }`}
             title="AI Stylist"
@@ -173,7 +173,7 @@ export default function Navbar({
           {/* Mobile Search Toggle Button */}
           <button
             onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-            className="p-2 rounded-none sm:hidden text-stone-600 hover:text-editorial-ink transition-colors"
+            className="p-1.5 sm:p-2 rounded-none sm:hidden text-stone-600 hover:text-editorial-ink transition-colors"
             title="Search"
           >
             <Search className="h-5 w-5" />
@@ -182,7 +182,7 @@ export default function Navbar({
           {/* Wishlist Button */}
           <button
             onClick={() => setActiveTab('shop')} // Direct to shop listings
-            className="relative p-2 text-stone-600 hover:text-editorial-ink transition-colors"
+            className="relative p-1.5 sm:p-2 text-stone-600 hover:text-editorial-ink transition-colors"
             title="Wishlist"
           >
             <Heart className="h-5 w-5" />
@@ -196,7 +196,7 @@ export default function Navbar({
           {/* Cart Trigger */}
           <button
             onClick={openCart}
-            className="relative p-2 text-stone-600 hover:text-editorial-ink transition-colors"
+            className="relative p-1.5 sm:p-2 text-stone-600 hover:text-editorial-ink transition-colors"
             title="Shopping Cart"
           >
             <ShoppingBag className="h-5 w-5" />
@@ -210,7 +210,7 @@ export default function Navbar({
           {/* User Profile Account Trigger */}
           <button
             onClick={onOpenAuth}
-            className="flex items-center gap-1.5 p-2 text-stone-600 hover:text-editorial-ink transition-colors"
+            className="flex items-center gap-1.5 p-1.5 sm:p-2 text-stone-600 hover:text-editorial-ink transition-colors"
             title={user ? `Atelier Profile (${user.name})` : "Sign In / Register"}
           >
             <User className="h-5 w-5" />

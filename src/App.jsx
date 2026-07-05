@@ -14,6 +14,7 @@ export default function App() {
   // Navigation & Cart States
   const [activeTab, setActiveTab] = useState('shop');
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   
@@ -466,9 +467,19 @@ export default function App() {
             {/* Shop Listing Grid Layout */}
             <div className="flex flex-col lg:flex-row gap-8 items-start">
               
-              {/* Desktop Filters Sidebar */}
-              <aside className="w-full lg:w-64 bg-white border border-editorial-line rounded-none p-5 shrink-0 sticky top-24">
-                <div className="flex items-center justify-between border-b border-editorial-line pb-3 mb-4">
+              {/* Desktop & Mobile Filters Sidebar */}
+              <div className="w-full lg:w-64 shrink-0">
+                <div className="lg:hidden mb-4">
+                  <button
+                    onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
+                    className="w-full bg-editorial-ink text-white py-3 text-xs font-mono font-bold uppercase tracking-widest flex items-center justify-center gap-2 rounded-none"
+                  >
+                    <Filter className="h-4 w-4" />
+                    {isMobileFiltersOpen ? 'Hide Filters' : 'Show Filters'}
+                  </button>
+                </div>
+                <aside className={`${isMobileFiltersOpen ? 'block' : 'hidden'} lg:block bg-white border border-editorial-line rounded-none p-5 sticky top-24 mb-6 lg:mb-0`}>
+                  <div className="flex items-center justify-between border-b border-editorial-line pb-3 mb-4">
                   <span className="text-xs font-bold text-editorial-ink uppercase tracking-widest flex items-center gap-1.5 font-mono">
                     <Filter className="h-3.5 w-3.5" /> Filter Catalog
                   </span>
@@ -557,7 +568,8 @@ export default function App() {
                     />
                   </div>
                 </div>
-              </aside>
+                </aside>
+              </div>
 
               {/* Main Catalog grid section */}
               <div className="flex-1 space-y-6">
@@ -618,7 +630,7 @@ export default function App() {
                     </button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-6">
                     <AnimatePresence>
                       {filteredProducts.map((p) => (
                         <ProductCard
