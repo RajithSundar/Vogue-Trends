@@ -31,6 +31,7 @@ export default function App() {
   // Filters state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [showWishlistOnly, setShowWishlistOnly] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState('All');
   const [selectedColor, setSelectedColor] = useState('All');
   const [maxPrice, setMaxPrice] = useState(220);
@@ -257,7 +258,6 @@ export default function App() {
 
     saveCart(updated);
     trackBrowsingEvent(product.id, 'add_to_cart');
-    setIsCartOpen(true);
   };
 
   const handleAddMultipleToCart = (productsToAdd) => {
@@ -274,7 +274,6 @@ export default function App() {
       trackBrowsingEvent(product.id, 'add_to_cart');
     });
     saveCart(updated);
-    setIsCartOpen(true);
   };
 
   const handleUpdateCartQuantity = (productId, size, quantity) => {
@@ -346,10 +345,11 @@ export default function App() {
       const matchesStyle = selectedStyle === 'All' || p.style === selectedStyle;
       const matchesColor = selectedColor === 'All' || p.color === selectedColor;
       const matchesPrice = p.price <= maxPrice;
+      const matchesWishlist = !showWishlistOnly || wishlist.includes(p.id);
 
-      return matchesSearch && matchesCategory && matchesStyle && matchesColor && matchesPrice;
+      return matchesSearch && matchesCategory && matchesStyle && matchesColor && matchesPrice && matchesWishlist;
     });
-  }, [products, searchQuery, selectedCategory, selectedStyle, selectedColor, maxPrice]);
+  }, [products, searchQuery, selectedCategory, selectedStyle, selectedColor, maxPrice, showWishlistOnly, wishlist]);
 
   // Handle Editorial Trend Triggering
   const handleSelectTrendStyle = (vibe) => {
@@ -366,6 +366,7 @@ export default function App() {
     setSelectedColor('All');
     setMaxPrice(220);
     setSearchQuery('');
+    setShowWishlistOnly(false);
   };
 
   const cartTotalCount = cartItems.reduce((acc, i) => acc + i.quantity, 0);
@@ -379,6 +380,10 @@ export default function App() {
         setActiveTab={setActiveTab}
         cartCount={cartTotalCount}
         wishlistCount={wishlist.length}
+        onWishlistClick={() => {
+          setShowWishlistOnly(!showWishlistOnly);
+          if (activeTab !== 'shop') setActiveTab('shop');
+        }}
         openCart={() => setIsCartOpen(true)}
         browsingCount={browsingHistory.length}
         searchQuery={searchQuery}
@@ -605,6 +610,11 @@ export default function App() {
                     {maxPrice < 220 && (
                       <span className="border border-editorial-line bg-white text-stone-700 rounded-none px-2.5 py-0.5 text-[9px] font-mono uppercase">
                         &lt; ${maxPrice}
+                      </span>
+                    )}
+                    {showWishlistOnly && (
+                      <span className="border border-[#8B4513] bg-[#8B4513]/10 text-[#8B4513] rounded-none px-2.5 py-0.5 text-[9px] font-mono uppercase flex items-center gap-1">
+                        <Heart className="h-2.5 w-2.5 fill-current" /> Liked Only
                       </span>
                     )}
                   </div>

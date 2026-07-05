@@ -7,6 +7,7 @@ export default function Navbar({
   setActiveTab,
   cartCount,
   wishlistCount,
+  onWishlistClick,
   openCart,
   browsingCount,
   searchQuery,
@@ -43,8 +44,9 @@ export default function Navbar({
   const status = getAiLearningStatus();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-editorial-line bg-editorial-bg/95 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <>
+      <header className="sticky top-0 z-40 w-full border-b border-editorial-line bg-editorial-bg/95 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         
         {/* Hamburger & Logo Group */}
         <div className="flex items-center gap-3">
@@ -171,30 +173,34 @@ export default function Navbar({
 
           {/* Wishlist Button */}
           <button
-            onClick={() => setActiveTab('shop')} // Direct to shop listings
-            className="relative p-1.5 sm:p-2 text-stone-600 hover:text-editorial-ink transition-colors touch-target"
+            onClick={onWishlistClick}
+            className="p-1.5 sm:p-2 text-stone-600 hover:text-editorial-ink transition-colors touch-target"
             title="Wishlist"
           >
-            <Heart className="h-5 w-5" />
-            {wishlistCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center bg-editorial-accent text-[9px] font-bold text-white">
-                {wishlistCount}
-              </span>
-            )}
+            <span className="relative flex">
+              <Heart className="h-5 w-5" />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-editorial-accent text-[9px] font-bold text-white">
+                  {wishlistCount}
+                </span>
+              )}
+            </span>
           </button>
 
           {/* Cart Trigger */}
           <button
             onClick={openCart}
-            className="relative p-1.5 sm:p-2 text-stone-600 hover:text-editorial-ink transition-colors touch-target"
+            className="p-1.5 sm:p-2 text-stone-600 hover:text-editorial-ink transition-colors touch-target"
             title="Shopping Cart"
           >
-            <ShoppingBag className="h-5 w-5" />
-            {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center bg-editorial-ink text-[9px] font-bold text-white">
-                {cartCount}
-              </span>
-            )}
+            <span className="relative flex">
+              <ShoppingBag className="h-5 w-5" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-editorial-ink text-[9px] font-bold text-white">
+                  {cartCount}
+                </span>
+              )}
+            </span>
           </button>
 
           {/* User Profile Account Trigger */}
@@ -232,6 +238,8 @@ export default function Navbar({
           </div>
         </div>
       )}
+
+      </header>
 
       {/* Mobile Sidebar Drawer */}
       <AnimatePresence>
@@ -294,6 +302,6 @@ export default function Navbar({
           </>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

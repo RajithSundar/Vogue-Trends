@@ -116,7 +116,7 @@ export default function ProductDetailModal({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: '100%' }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="relative z-10 w-full h-[95dvh] xl:h-auto xl:max-h-[92vh] max-w-4xl rounded-t-2xl xl:rounded-none border-t xl:border border-editorial-line bg-white shadow-none overflow-hidden flex flex-col xl:flex-row"
+          className="relative z-10 w-full h-[85dvh] xl:h-auto xl:max-h-[92vh] max-w-4xl rounded-t-2xl xl:rounded-none border-t xl:border border-editorial-line bg-white shadow-none overflow-y-auto xl:overflow-hidden flex flex-col xl:flex-row"
         >
           {/* Close button */}
           <button
@@ -127,7 +127,7 @@ export default function ProductDetailModal({
           </button>
 
           {/* Left Column: Image */}
-          <div className="xl:w-1/2 relative bg-stone-100 aspect-square xl:aspect-auto">
+          <div className="xl:w-1/2 relative bg-stone-100 shrink-0 h-[50dvh] xl:h-auto">
             <img
               src={product.imageUrl}
               alt={product.name}
@@ -140,7 +140,7 @@ export default function ProductDetailModal({
           </div>
 
           {/* Right Column: Information & Reviews list */}
-          <div className="xl:w-1/2 p-5 sm:p-6 xl:p-8 flex flex-col justify-between overflow-y-auto h-full bg-white pb-safe">
+          <div className="xl:w-1/2 p-5 sm:p-6 xl:p-8 flex flex-col justify-between xl:flex-1 xl:min-h-0 xl:overflow-y-auto bg-white pb-safe">
             <div className="space-y-5 xl:space-y-6">
               
               {/* Category, Vibe and general average stars */}

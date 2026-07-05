@@ -21,7 +21,10 @@ export default function ProductCard({
       className="group relative flex flex-col overflow-hidden rounded-none border border-editorial-line bg-editorial-bg transition-colors duration-300 hover:bg-white hover:shadow-xs"
     >
       {/* Product Image and badges */}
-      <div className="relative aspect-[4/5] overflow-hidden bg-stone-100 border-b border-editorial-line">
+      <div 
+        className="relative aspect-[4/5] overflow-hidden bg-stone-100 border-b border-editorial-line cursor-pointer"
+        onClick={() => onViewDetails(product)}
+      >
         <img
           src={product.imageUrl}
           alt={product.name}
@@ -77,7 +80,10 @@ export default function ProductCard({
         </div>
 
         {/* Product Name */}
-        <h3 className="font-serif text-sm sm:text-lg font-normal text-editorial-ink group-hover:text-editorial-accent transition-colors line-clamp-1">
+        <h3 
+          className="font-serif text-sm sm:text-lg font-normal text-editorial-ink group-hover:text-editorial-accent transition-colors line-clamp-1 cursor-pointer"
+          onClick={() => onViewDetails(product)}
+        >
           {product.name}
         </h3>
 
@@ -109,13 +115,6 @@ export default function ProductCard({
           ))}
         </div>
 
-        {/* Trigger button */}
-        <button
-          onClick={() => onViewDetails(product)}
-          className="mt-auto min-h-[44px] w-full rounded-none bg-editorial-ink text-white py-1.5 sm:py-2.5 text-center text-[10px] sm:text-xs font-bold tracking-widest uppercase transition-all hover:bg-editorial-accent"
-        >
-          View Selection
-        </button>
       </div>
     </motion.div>
   );
