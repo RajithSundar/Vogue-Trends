@@ -680,6 +680,7 @@ export default function App() {
         onClearCart={handleClearCart}
         token={token}
         user={user}
+        onOpenAuth={() => setIsAuthOpen(true)}
       />
 
       {/* Account Verification Modal */}

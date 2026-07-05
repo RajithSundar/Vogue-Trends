@@ -11,6 +11,7 @@ export default function CartDrawer({
   onClearCart,
   token,
   user,
+  onOpenAuth,
 }) {
   const [checkoutStep, setCheckoutStep] = useState('cart');
   const [checkoutForm, setCheckoutForm] = useState({
@@ -112,12 +113,8 @@ export default function CartDrawer({
         setIsSubmitting(false);
       }
     } else {
-      // Local/Anonymous fallback
-      setTimeout(() => {
-        setIsSubmitting(false);
-        setAppliedPromo(''); // Reset promo code on success
-        setCheckoutStep('success');
-      }, 1000);
+      setCheckoutError('You must be signed in to place an order.');
+      setIsSubmitting(false);
     }
   };
 
@@ -260,13 +257,23 @@ export default function CartDrawer({
                       </div>
 
                       {/* Go to Checkout */}
-                      <button
-                        onClick={() => setCheckoutStep('checkout')}
-                        className="w-full rounded-none bg-editorial-ink py-3.5 text-[10px] font-mono uppercase tracking-widest font-bold text-white shadow-none hover:bg-editorial-accent transition-colors flex items-center justify-center gap-1.5"
-                      >
-                        Proceed to Checkout
-                        <ChevronRight className="h-4 w-4" />
-                      </button>
+                      {token ? (
+                        <button
+                          onClick={() => setCheckoutStep('checkout')}
+                          className="w-full rounded-none bg-editorial-ink py-3.5 text-[10px] font-mono uppercase tracking-widest font-bold text-white shadow-none hover:bg-editorial-accent transition-colors flex items-center justify-center gap-1.5"
+                        >
+                          Proceed to Checkout
+                          <ChevronRight className="h-4 w-4" />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => { onOpenAuth(); }}
+                          className="w-full rounded-none bg-editorial-ink py-3.5 text-[10px] font-mono uppercase tracking-widest font-bold text-white shadow-none hover:bg-editorial-accent transition-colors flex items-center justify-center gap-1.5"
+                        >
+                          Sign In to Checkout
+                          <ChevronRight className="h-4 w-4" />
+                        </button>
+                      )}
                     </div>
                   </>
                 )}
@@ -295,12 +302,6 @@ export default function CartDrawer({
 
                 <form onSubmit={handleCheckout} className="space-y-4 flex-1 flex flex-col justify-between">
                   <div className="space-y-3">
-                    {!token && (
-                      <div className="p-2.5 border border-[#8B4513]/20 bg-[#F9F8F6] text-[10px] text-[#8B4513] font-mono leading-relaxed">
-                        ⚠️ Checkout anonymous. Connect your Atelier Account to persist purchases in your MERN profile.
-                      </div>
-                    )}
-
                     <div>
                       <label className="block text-[10px] font-mono font-bold uppercase tracking-widest text-stone-400 mb-1">
                         Shipping Recipient
@@ -469,8 +470,7 @@ export default function CartDrawer({
                 <div className="max-w-[280px]">
                   <h4 className="font-serif text-2xl font-normal text-editorial-ink italic">Capsule Order Placed!</h4>
                   <p className="text-xs text-stone-500 mt-2 leading-relaxed">
-                    Thank you for your acquisition.
-                    {token ? ' Your order record has been successfully registered in the MERN cloud cluster.' : ' Since you ordered anonymously, this order was recorded locally.'}
+                    Thank you for your acquisition. Your order record has been successfully registered in the MERN cloud cluster.
                   </p>
                 </div>
                 <button

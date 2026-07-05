@@ -1,6 +1,10 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { DB } from '../config/db.js';
+import { OAuth2Client } from 'google-auth-library';
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '877550687165-usg5oc9bgvuptq00mepcn17ge3q36ujv.apps.googleusercontent.com';
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const JWT_SECRET = process.env.JWT_SECRET || 'vogue_secret_key_jwt_2026_fallback';
 
@@ -76,6 +80,48 @@ export async function login(req, res) {
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ message: 'Server error during login' });
+  }
+}
+
+export async function googleLogin(req, res) {
+  try {
+    const { token: googleToken } = req.body;
+    if (!googleToken) {
+      return res.status(400).json({ message: 'Google token is required' });
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: googleToken,
+      audience: GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const email = payload.email.toLowerCase();
+    const name = payload.name;
+
+    let user = await DB.users.findOne({ email });
+    if (!user) {
+      user = await DB.users.create({
+        email,
+        name,
+        passwordHash: crypto.randomBytes(16).toString('hex'),
+        preferredStyle: ''
+      });
+    }
+
+    const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        preferredStyle: user.preferredStyle
+      }
+    });
+  } catch (error) {
+    console.error('Error during Google login:', error);
+    res.status(401).json({ message: 'Invalid Google token' });
   }
 }
 

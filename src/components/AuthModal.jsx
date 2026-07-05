@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { X, Lock, Mail, User, LogOut, CheckCircle, Database, Package, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '877550687165-usg5oc9bgvuptq00mepcn17ge3q36ujv.apps.googleusercontent.com';
 
 export default function AuthModal({ isOpen, onClose, token, user, onLogin, onLogout }) {
   const [activeTab, setActiveTab] = useState('login');
@@ -103,6 +106,32 @@ export default function AuthModal({ isOpen, onClose, token, user, onLogin, onLog
       onClose();
       setSuccess('');
     }, 1200);
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setError('');
+    setSuccess('');
+    setLoading(true);
+    try {
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: credentialResponse.credential })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Google Auth failed');
+      
+      onLogin(data.token, data.user);
+      setSuccess('Successfully authenticated with Google!');
+      setTimeout(() => {
+        onClose();
+        setSuccess('');
+      }, 1500);
+    } catch (err) {
+      setError(err.message || 'Google authentication failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -358,6 +387,19 @@ export default function AuthModal({ isOpen, onClose, token, user, onLogin, onLog
                       {loading ? 'Processing Session...' : activeTab === 'login' ? 'Authenticate Account' : 'Register New Ledger'}
                     </button>
                   </form>
+
+                  <div className="pt-2 flex justify-center">
+                    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+                      <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={() => setError('Google Login Failed')}
+                        theme="outline"
+                        shape="square"
+                        text="continue_with"
+                        width="100%"
+                      />
+                    </GoogleOAuthProvider>
+                  </div>
 
                   <div className="text-center pt-2 space-y-1.5">
                     <p className="text-[11px] text-stone-400 italic">
