@@ -400,7 +400,7 @@ export default function App() {
           <div className="space-y-8">
             
             {/* Elegant Hero Banner */}
-            <div className="relative rounded-none overflow-hidden bg-editorial-ink text-[#F9F8F6] p-8 sm:p-12 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="relative rounded-none overflow-hidden bg-editorial-ink text-[#F9F8F6] p-8 sm:p-12 flex flex-col xl:flex-row justify-between items-center gap-6">
               <div className="absolute inset-0 opacity-15">
                 <img
                   src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=1200&auto=format&fit=crop&q=80"
@@ -413,7 +413,7 @@ export default function App() {
                 <span className="inline-flex items-center gap-1.5 text-[10px] font-mono tracking-widest text-[#D2B48C] uppercase">
                   <Flame className="h-3.5 w-3.5 fill-[#D2B48C]" /> Seasonal Edit
                 </span>
-                <h1 className="font-serif text-2xl sm:text-3xl md:text-5xl font-normal italic tracking-tight leading-tight">
+                <h1 className="font-serif text-2xl sm:text-3xl xl:text-5xl font-normal italic tracking-tight leading-tight">
                   Organic Linens & Textured Suede
                 </h1>
                 <p className="text-xs text-stone-300 leading-relaxed font-sans">
@@ -430,7 +430,7 @@ export default function App() {
               </div>
 
               {/* Quick info cards for the user style profile */}
-              <div className="relative bg-white/5 backdrop-blur-sm p-6 rounded-none border border-white/10 w-full md:w-80 space-y-4">
+              <div className="relative bg-white/5 backdrop-blur-sm p-6 rounded-none border border-white/10 w-full xl:w-80 space-y-4">
                 <div className="flex items-center gap-1.5 text-[#D2B48C]">
                   <Sparkles className="h-3.5 w-3.5 fill-[#D2B48C]" />
                   <span className="text-[10px] font-semibold uppercase tracking-wider font-mono">Personalizer Active</span>
@@ -465,11 +465,11 @@ export default function App() {
             </div>
 
             {/* Shop Listing Grid Layout */}
-            <div className="flex flex-col lg:flex-row gap-8 items-start">
+            <div className="flex flex-col xl:flex-row gap-8 items-start">
               
               {/* Desktop & Mobile Filters Sidebar */}
-              <div className="w-full lg:w-64 shrink-0">
-                <div className="lg:hidden mb-4">
+              <div className="w-full xl:w-64 shrink-0">
+                <div className="xl:hidden mb-4">
                   <button
                     onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
                     className="w-full bg-editorial-ink text-white py-3 text-xs font-mono font-bold uppercase tracking-widest flex items-center justify-center gap-2 rounded-none touch-target"
@@ -478,7 +478,7 @@ export default function App() {
                     {isMobileFiltersOpen ? 'Hide Filters' : 'Show Filters'}
                   </button>
                 </div>
-                <aside className={`${isMobileFiltersOpen ? 'block' : 'hidden'} lg:block bg-white border border-editorial-line rounded-none p-5 sticky top-24 mb-6 lg:mb-0`}>
+                <aside className={`${isMobileFiltersOpen ? 'block' : 'hidden'} xl:block bg-white border border-editorial-line rounded-none p-5 sticky top-24 mb-6 xl:mb-0`}>
                   <div className="flex items-center justify-between border-b border-editorial-line pb-3 mb-4">
                   <span className="text-xs font-bold text-editorial-ink uppercase tracking-widest flex items-center gap-1.5 font-mono">
                     <Filter className="h-3.5 w-3.5" /> Filter Catalog

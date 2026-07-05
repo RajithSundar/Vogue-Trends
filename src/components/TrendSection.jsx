@@ -81,12 +81,12 @@ export default function TrendSection({ onSelectTrendStyle, setActiveTab }) {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
               key={trend.id}
-              className={`flex flex-col lg:flex-row gap-8 items-center bg-[#F9F8F6] p-6 sm:p-8 rounded-none border border-editorial-line hover:bg-white transition-colors duration-300 ${
-                isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'
+              className={`flex flex-col xl:flex-row gap-8 items-center bg-[#F9F8F6] p-6 sm:p-8 rounded-none border border-editorial-line hover:bg-white transition-colors duration-300 ${
+                isEven ? 'xl:flex-row' : 'xl:flex-row-reverse'
               }`}
             >
               {/* Image highlight */}
-              <div className="w-full lg:w-1/2 aspect-[16/10] sm:aspect-[16/9] lg:aspect-[4/3] rounded-none overflow-hidden bg-stone-100 border border-editorial-line">
+              <div className="w-full xl:w-1/2 aspect-[16/10] sm:aspect-[16/9] xl:aspect-[4/3] rounded-none overflow-hidden bg-stone-100 border border-editorial-line">
                 <img
                   src={trend.highlightImageUrl}
                   alt={trend.name}
@@ -97,7 +97,7 @@ export default function TrendSection({ onSelectTrendStyle, setActiveTab }) {
               </div>
 
               {/* Trend details */}
-              <div className="w-full lg:w-1/2 space-y-5">
+              <div className="w-full xl:w-1/2 space-y-5">
                 <div className="space-y-1.5">
                   <span className="text-[9px] uppercase font-mono font-bold tracking-wider text-editorial-accent bg-[#8B4513]/10 rounded-none px-2.5 py-1 inline-block">
                     Trend #{idx + 1} • {trend.vibe} Style

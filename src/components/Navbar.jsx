@@ -50,7 +50,7 @@ export default function Navbar({
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="md:hidden p-1.5 sm:p-2 -ml-2 text-stone-600 hover:text-editorial-ink transition-colors touch-target"
+            className="xl:hidden p-1.5 sm:p-2 -ml-2 text-stone-600 hover:text-editorial-ink transition-colors touch-target"
             aria-label="Menu"
           >
             <Menu className="h-5 w-5" />
@@ -65,7 +65,7 @@ export default function Navbar({
         </div>
 
         {/* Navigation links */}
-        <nav className="hidden md:flex space-x-2">
+        <nav className="hidden xl:flex space-x-2">
           <button
             onClick={() => setActiveTab('shop')}
             className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 ${
@@ -141,7 +141,7 @@ export default function Navbar({
         <div className="flex items-center gap-1 sm:gap-4">
           
           {/* AI engine feedback pill */}
-          <div className="flex flex-col items-end hidden lg:flex">
+          <div className="flex flex-col items-end hidden xl:flex">
             <div className="flex items-center gap-1.5">
               <span className={`text-[9px] font-mono tracking-widest uppercase px-2.5 py-1 font-semibold ${
                 browsingCount === 0 
@@ -205,7 +205,7 @@ export default function Navbar({
           >
             <User className="h-5 w-5" />
             {user && (
-              <span className="hidden lg:inline text-[10px] font-mono uppercase tracking-widest font-semibold text-editorial-ink max-w-[80px] truncate">
+              <span className="hidden xl:inline text-[10px] font-mono uppercase tracking-widest font-semibold text-editorial-ink max-w-[80px] truncate">
                 {user.name.split(' ')[0]}
               </span>
             )}
@@ -242,14 +242,14 @@ export default function Navbar({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm xl:hidden"
             />
             <motion.div
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'tween', duration: 0.3 }}
-              className="fixed inset-y-0 left-0 z-50 w-[85vw] max-w-[380px] bg-white shadow-xl md:hidden flex flex-col"
+              className="fixed inset-y-0 left-0 z-50 w-[85vw] max-w-[380px] bg-white shadow-xl xl:hidden flex flex-col"
             >
               <div className="flex items-center justify-between p-4 border-b border-editorial-line h-16">
                 <span className="font-serif italic text-2xl font-bold tracking-tight text-editorial-ink">

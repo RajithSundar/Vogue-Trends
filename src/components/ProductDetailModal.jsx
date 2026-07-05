@@ -106,7 +106,7 @@ export default function ProductDetailModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center overflow-hidden bg-black/60 md:px-4 md:py-6 backdrop-blur-xs">
+      <div className="fixed inset-0 z-50 flex items-end xl:items-center justify-center overflow-hidden bg-black/60 xl:px-4 xl:py-6 backdrop-blur-xs">
         {/* Background Click Close */}
         <div className="absolute inset-0 cursor-pointer" onClick={onClose} />
 
@@ -116,18 +116,18 @@ export default function ProductDetailModal({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: '100%' }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="relative z-10 w-full h-[95dvh] md:h-auto md:max-h-[92vh] max-w-4xl rounded-t-2xl md:rounded-none border-t md:border border-editorial-line bg-white shadow-none overflow-hidden flex flex-col md:flex-row"
+          className="relative z-10 w-full h-[95dvh] xl:h-auto xl:max-h-[92vh] max-w-4xl rounded-t-2xl xl:rounded-none border-t xl:border border-editorial-line bg-white shadow-none overflow-hidden flex flex-col xl:flex-row"
         >
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-20 flex h-8 w-8 items-center justify-center rounded-none border border-transparent md:border-editorial-line bg-white/80 md:bg-white text-stone-700 transition-colors hover:bg-stone-100 touch-target backdrop-blur-sm md:backdrop-blur-none"
+            className="absolute top-4 right-4 z-20 flex h-8 w-8 items-center justify-center rounded-none border border-transparent xl:border-editorial-line bg-white/80 xl:bg-white text-stone-700 transition-colors hover:bg-stone-100 touch-target backdrop-blur-sm xl:backdrop-blur-none"
           >
             <X className="h-4 w-4" />
           </button>
 
           {/* Left Column: Image */}
-          <div className="md:w-1/2 relative bg-stone-100 aspect-square md:aspect-auto">
+          <div className="xl:w-1/2 relative bg-stone-100 aspect-square xl:aspect-auto">
             <img
               src={product.imageUrl}
               alt={product.name}
@@ -136,12 +136,12 @@ export default function ProductDetailModal({
               className="w-full h-full object-cover"
             />
             {/* Soft border styling */}
-            <div className="absolute inset-0 border-r border-editorial-line hidden md:block pointer-events-none" />
+            <div className="absolute inset-0 border-r border-editorial-line hidden xl:block pointer-events-none" />
           </div>
 
           {/* Right Column: Information & Reviews list */}
-          <div className="md:w-1/2 p-5 sm:p-6 md:p-8 flex flex-col justify-between overflow-y-auto h-full bg-white pb-safe">
-            <div className="space-y-5 md:space-y-6">
+          <div className="xl:w-1/2 p-5 sm:p-6 xl:p-8 flex flex-col justify-between overflow-y-auto h-full bg-white pb-safe">
+            <div className="space-y-5 xl:space-y-6">
               
               {/* Category, Vibe and general average stars */}
               <div className="flex items-center justify-between">
