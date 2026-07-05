@@ -8,6 +8,8 @@ import MongoWishlist from '../models/Wishlist.js';
 import MongoCart from '../models/Cart.js';
 import MongoOrder from '../models/Order.js';
 import MongoReview from '../models/Review.js';
+import MongoProduct from '../models/Product.js';
+import { PRODUCTS as defaultProducts } from '../../src/data/products.js';
 
 // Global variable indicating if MongoDB is connected
 export let isUsingMongoDB = false;
@@ -20,6 +22,7 @@ const defaultLocalDB = {
   wishlists: [],
   carts: [],
   orders: [],
+  products: defaultProducts.map(p => ({ ...p, _id: p.id, stock: 100 })),
   reviews: [
     {
       _id: 'rev-default-1',
@@ -71,6 +74,18 @@ export async function connectDatabase() {
       await mongoose.connect(mongoUri);
       isUsingMongoDB = true;
       console.log('✅ Successfully connected to MongoDB Atlas!');
+
+      // Seed products if collection is empty
+      const productCount = await MongoProduct.countDocuments();
+      if (productCount === 0) {
+        console.log('Seeding products collection...');
+        const productsToInsert = defaultProducts.map(p => {
+          const { id, ...rest } = p;
+          return { _id: id, ...rest, stock: 100 };
+        });
+        await MongoProduct.insertMany(productsToInsert);
+        console.log('✅ Products seeded successfully.');
+      }
     } catch (err) {
       console.error('❌ MongoDB Connection Failure, falling back to local database file:', err);
       isUsingMongoDB = false;
@@ -309,6 +324,66 @@ export const DB = {
         db.reviews.push(newReview);
         writeLocalDB(db);
         return newReview;
+      }
+    }
+  },
+
+  products: {
+    async findAll() {
+      if (isUsingMongoDB) {
+        const products = await MongoProduct.find({}).sort({ createdAt: -1 });
+        return products.map(p => p.toObject());
+      } else {
+        const db = readLocalDB();
+        return db.products || [];
+      }
+    },
+
+    async create(productData) {
+      if (isUsingMongoDB) {
+        const product = new MongoProduct(productData);
+        await product.save();
+        return product.toObject();
+      } else {
+        const db = readLocalDB();
+        const newProduct = {
+          ...productData,
+          _id: productData._id || ('prod-' + Math.random().toString(36).substr(2, 9)),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        db.products = db.products || [];
+        db.products.push(newProduct);
+        writeLocalDB(db);
+        return newProduct;
+      }
+    },
+
+    async update(productId, updateData) {
+      if (isUsingMongoDB) {
+        const product = await MongoProduct.findByIdAndUpdate(productId, updateData, { new: true });
+        return product ? product.toObject() : null;
+      } else {
+        const db = readLocalDB();
+        const pIndex = (db.products || []).findIndex(p => p._id === productId);
+        if (pIndex !== -1) {
+          db.products[pIndex] = { ...db.products[pIndex], ...updateData, updatedAt: new Date().toISOString() };
+          writeLocalDB(db);
+          return db.products[pIndex];
+        }
+        return null;
+      }
+    },
+
+    async delete(productId) {
+      if (isUsingMongoDB) {
+        await MongoProduct.findByIdAndDelete(productId);
+        return true;
+      } else {
+        const db = readLocalDB();
+        db.products = (db.products || []).filter(p => p._id !== productId);
+        writeLocalDB(db);
+        return true;
       }
     }
   }

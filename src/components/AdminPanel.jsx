@@ -2,17 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Shield, Sparkles, TrendingUp, Package, ShoppingBag, Plus, RefreshCw, CheckCircle, Database } from 'lucide-react';
 import { motion } from 'motion/react';
 
-export default function AdminPanel({ token, products, onAddProduct }) {
+export default function AdminPanel({ token, products, onAddProduct, onUpdateProduct, onDeleteProduct }) {
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [editForm, setEditForm] = useState({ price: 0, stock: 0 });
   
   // New Product form state
   const [showAddForm, setShowAddForm] = useState(false);
   const [newProduct, setNewProduct] = useState({
     name: '',
     price: 85,
+    stock: 100,
     category: 'Tops',
     style: 'Minimalist',
     color: 'Stone Gray',
@@ -75,6 +79,42 @@ export default function AdminPanel({ token, products, onAddProduct }) {
     }
   };
 
+  const handleUpdateSubmit = async (id) => {
+    setError('');
+    try {
+      const res = await fetch(`/api/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ price: Number(editForm.price), stock: Number(editForm.stock) })
+      });
+      if (!res.ok) throw new Error('Failed to update product.');
+      const updated = await res.json();
+      onUpdateProduct(updated);
+      setSuccess('Product updated!');
+      setEditingProduct(null);
+      setTimeout(() => setSuccess(''), 2500);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleDeleteClick = async (id) => {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+    setError('');
+    try {
+      const res = await fetch(`/api/products/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error('Failed to delete product.');
+      onDeleteProduct(id);
+      setSuccess('Product deleted!');
+      setTimeout(() => setSuccess(''), 2500);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const handleProductSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -88,6 +128,7 @@ export default function AdminPanel({ token, products, onAddProduct }) {
     const payload = {
       name: newProduct.name,
       price: Number(newProduct.price),
+      stock: Number(newProduct.stock),
       category: newProduct.category,
       style: newProduct.style,
       color: newProduct.color,
@@ -121,6 +162,7 @@ export default function AdminPanel({ token, products, onAddProduct }) {
       setNewProduct({
         name: '',
         price: 85,
+        stock: 100,
         category: 'Tops',
         style: 'Minimalist',
         color: 'Stone Gray',
@@ -354,19 +396,31 @@ export default function AdminPanel({ token, products, onAddProduct }) {
                   />
                 </div>
                 <div>
-                  <label className="block text-[9px] font-mono uppercase text-stone-400 mb-1">Category</label>
-                  <select
-                    value={newProduct.category}
-                    onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-                    className="w-full rounded-none border border-editorial-line bg-white p-2 text-xs outline-none focus:border-editorial-ink font-mono"
-                  >
-                    <option value="Tops">Tops</option>
-                    <option value="Bottoms">Bottoms</option>
-                    <option value="Outerwear">Outerwear</option>
-                    <option value="Footwear">Footwear</option>
-                    <option value="Accessories">Accessories</option>
-                  </select>
+                  <label className="block text-[9px] font-mono uppercase text-stone-400 mb-1">Unit Stock</label>
+                  <input
+                    type="number"
+                    required
+                    min="0"
+                    value={newProduct.stock}
+                    onChange={(e) => setNewProduct({ ...newProduct, stock: Number(e.target.value) })}
+                    className="w-full rounded-none border border-editorial-line bg-white p-2 text-xs outline-none focus:border-editorial-ink"
+                  />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-[9px] font-mono uppercase text-stone-400 mb-1">Category</label>
+                <select
+                  value={newProduct.category}
+                  onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+                  className="w-full rounded-none border border-editorial-line bg-white p-2 text-xs outline-none focus:border-editorial-ink font-mono"
+                >
+                  <option value="Tops">Tops</option>
+                  <option value="Bottoms">Bottoms</option>
+                  <option value="Outerwear">Outerwear</option>
+                  <option value="Footwear">Footwear</option>
+                  <option value="Accessories">Accessories</option>
+                </select>
               </div>
 
               <div className="grid grid-cols-2 gap-2">
@@ -466,13 +520,33 @@ export default function AdminPanel({ token, products, onAddProduct }) {
                       <span>{p.category}</span>
                       <span>•</span>
                       <span className="font-bold text-editorial-accent">${p.price}</span>
+                      <span>•</span>
+                      <span>Stk: {p.stock ?? 100}</span>
                     </div>
                   </div>
-                  <div
-                    className="h-3 w-3 rounded-full border border-stone-300 shrink-0"
-                    style={{ backgroundColor: p.colorCode }}
-                    title={p.color}
-                  />
+                  
+                  {editingProduct === (p.id || p._id) ? (
+                    <div className="flex flex-col gap-1.5 items-end ml-2">
+                      <div className="flex gap-1">
+                        <input type="number" className="w-14 text-[10px] p-1 border border-editorial-line outline-none bg-white font-mono" value={editForm.price} onChange={e => setEditForm({...editForm, price: e.target.value})} placeholder="Price" title="Price" />
+                        <input type="number" className="w-14 text-[10px] p-1 border border-editorial-line outline-none bg-white font-mono" value={editForm.stock} onChange={e => setEditForm({...editForm, stock: e.target.value})} placeholder="Stock" title="Stock" />
+                      </div>
+                      <div className="flex gap-1">
+                        <button onClick={() => setEditingProduct(null)} className="text-[9px] border border-stone-300 px-2 py-0.5 text-stone-500 uppercase tracking-widest font-bold">Cancel</button>
+                        <button onClick={() => handleUpdateSubmit(p.id || p._id)} className="text-[9px] border border-editorial-ink bg-editorial-ink text-white px-2 py-0.5 uppercase tracking-widest font-bold">Save</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex gap-3 ml-2 items-center">
+                      <div
+                        className="h-3 w-3 rounded-full border border-stone-300 shrink-0"
+                        style={{ backgroundColor: p.colorCode }}
+                        title={p.color}
+                      />
+                      <button onClick={() => { setEditingProduct(p.id || p._id); setEditForm({ price: p.price, stock: p.stock ?? 100 }); }} className="text-[9px] text-[#8B4513] hover:underline font-mono uppercase tracking-widest font-bold">Edit</button>
+                      <button onClick={() => handleDeleteClick(p.id || p._id)} className="text-[9px] text-red-600 hover:underline font-mono uppercase tracking-widest font-bold">Del</button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

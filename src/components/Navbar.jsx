@@ -82,7 +82,7 @@ export default function Navbar({
             Trend Board
           </button>
 
-          {user?.email === 'admin@vogue.com' && (
+          {user?.email === 'user' && (
             <button
               onClick={() => setActiveTab('admin')}
               className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 ${
@@ -158,7 +158,7 @@ export default function Navbar({
           </button>
 
           {/* Mobile Admin tab icon */}
-          {user?.email === 'admin@vogue.com' && (
+          {user?.email === 'user' && (
             <button
               onClick={() => setActiveTab('admin')}
               className={`p-2 rounded-none md:hidden transition-colors ${

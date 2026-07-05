@@ -301,7 +301,18 @@ export default function App() {
   };
 
   const handleAddProduct = (newProd) => {
-    setProducts((prev) => [...prev, newProd]);
+    // Map _id to id if necessary, though newProd already comes from backend where we could have mapped it, 
+    // or just ensure we use newProd.id or newProd._id seamlessly
+    const prodWithId = { ...newProd, id: newProd.id || newProd._id };
+    setProducts((prev) => [...prev, prodWithId]);
+  };
+
+  const handleUpdateProduct = (updatedProd) => {
+    setProducts((prev) => prev.map(p => p.id === (updatedProd.id || updatedProd._id) ? { ...updatedProd, id: updatedProd.id || updatedProd._id } : p));
+  };
+
+  const handleDeleteProduct = (productId) => {
+    setProducts((prev) => prev.filter(p => p.id !== productId && p._id !== productId));
   };
 
   // 5. Wishlist handlers
@@ -654,6 +665,8 @@ export default function App() {
             token={token}
             products={products}
             onAddProduct={handleAddProduct}
+            onUpdateProduct={handleUpdateProduct}
+            onDeleteProduct={handleDeleteProduct}
           />
         )}
 

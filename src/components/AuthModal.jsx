@@ -347,16 +347,16 @@ export default function AuthModal({ isOpen, onClose, token, user, onLogin, onLog
 
                     <div>
                       <label className="block text-[10px] font-mono font-bold uppercase tracking-widest text-stone-400 mb-1">
-                        Atelier Email
+                        Username or Email
                       </label>
                       <div className="relative">
                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-stone-400" />
                         <input
-                          type="email"
+                          type="text"
                           required
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          placeholder="e.g. dior@haute.com"
+                          placeholder="e.g. user"
                           className="w-full rounded-none border border-editorial-line bg-white py-2.5 pl-9 pr-4 text-xs outline-none focus:border-editorial-ink"
                         />
                       </div>
@@ -404,9 +404,6 @@ export default function AuthModal({ isOpen, onClose, token, user, onLogin, onLog
                   <div className="text-center pt-2 space-y-1.5">
                     <p className="text-[11px] text-stone-400 italic">
                       Sign in to synchronize your curated trend board capsules, active wishlist items, and past order logs to the unified MERN database stack.
-                    </p>
-                    <p className="text-[10px] text-editorial-accent font-mono uppercase bg-[#F9F8F6] border border-editorial-line p-2">
-                      💡 <strong>Demo Portal Admin:</strong> Login with <strong>admin@vogue.com</strong> (password: admin123) to view administrative panels.
                     </p>
                   </div>
                 </div>

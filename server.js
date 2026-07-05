@@ -4,7 +4,6 @@ import path from 'path';
 
 // Configurations & Imports
 import { connectDatabase, isUsingMongoDB } from './server/config/db.js';
-import { PRODUCTS } from './src/data/products.js';
 
 // Import Route Handlers
 import authRoutes from './server/routes/authRoutes.js';
@@ -12,6 +11,7 @@ import cartRoutes from './server/routes/cartRoutes.js';
 import orderRoutes from './server/routes/orderRoutes.js';
 import reviewRoutes from './server/routes/reviewRoutes.js';
 import personalizeRoutes from './server/routes/personalizeRoutes.js';
+import productRoutes from './server/routes/productRoutes.js';
 
 const app = express();
 const PORT = 3000;
@@ -33,21 +33,7 @@ app.use('/api', cartRoutes); // matches /api/wishlist and /api/cart
 app.use('/api/orders', orderRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/personalize', personalizeRoutes); // matches /api/personalize and /api/personalize/chat
-
-// Public Catalog API
-app.get('/api/products', (req, res) => {
-  res.json(PRODUCTS);
-});
-
-// Add product to catalog in-memory listing
-app.post('/api/products', (req, res) => {
-  const newProduct = {
-    ...req.body,
-    id: 'prod-' + (PRODUCTS.length + 1)
-  };
-  PRODUCTS.push(newProduct);
-  res.status(201).json(newProduct);
-});
+app.use('/api/products', productRoutes);
 
 // Database Status API
 app.get('/api/db-status', (req, res) => {
