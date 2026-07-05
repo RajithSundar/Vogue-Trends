@@ -18,6 +18,15 @@ const PORT = 3000;
 
 app.use(express.json());
 
+// Initialize Database connection promise
+const dbReady = connectDatabase();
+
+// Middleware to ensure DB is connected before handling API requests
+app.use('/api', async (req, res, next) => {
+  await dbReady;
+  next();
+});
+
 // Mount API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api', cartRoutes); // matches /api/wishlist and /api/cart
@@ -45,27 +54,26 @@ app.get('/api/db-status', (req, res) => {
   res.json({ isUsingMongoDB });
 });
 
-// Setup Dev vs Production SPA servers
-async function startServer() {
-  // Connect to Database (MongoDB Atlas with Local JSON fallback)
-  await connectDatabase();
+// Setup Production SPA serving synchronously so Vercel can resolve routes immediately
+if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+  const distPath = path.join(process.cwd(), 'dist');
+  app.use(express.static(distPath));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
 
-  if (process.env.NODE_ENV !== 'production') {
+// Setup Dev Server and start listening
+async function startDevServer() {
+  if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
     });
     app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), 'dist');
-    app.use(express.static(distPath));
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
-    });
   }
 
-  // Only bind port listener if not running in serverless Vercel environment
   if (!process.env.VERCEL) {
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server is running on http://localhost:${PORT}`);
@@ -73,6 +81,6 @@ async function startServer() {
   }
 }
 
-startServer();
+startDevServer();
 
 export default app;
