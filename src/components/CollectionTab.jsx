@@ -11,6 +11,9 @@ export default function CollectionTab({
   onProductClick,
   setIsAuthOpen,
   setUser,
+  wishlist = [],
+  toggleWishlist = () => {},
+  preferredStyle = null,
 }) {
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [error, setError] = useState("");
@@ -179,7 +182,10 @@ export default function CollectionTab({
           <ProductCard
             key={product.id}
             product={product}
-            onClick={() => onProductClick(product)}
+            onViewDetails={onProductClick}
+            isWishlisted={wishlist.includes(product.id)}
+            toggleWishlist={toggleWishlist}
+            preferredStyle={preferredStyle}
           />
         ))}
       </div>

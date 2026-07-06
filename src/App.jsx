@@ -772,6 +772,9 @@ if (val.trim()) {
             onProductClick={setSelectedProduct}
             setIsAuthOpen={setIsAuthOpen}
             setUser={setUser}
+            wishlist={wishlist}
+            toggleWishlist={handleToggleWishlist}
+            preferredStyle={preferredStyle}
           />
         )}
 
