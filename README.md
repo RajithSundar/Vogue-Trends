@@ -161,7 +161,7 @@ If `MONGO_URI` is provided, all data is stored in MongoDB Atlas.
 
 ### Local Storage Fallback
 
-If no MongoDB connection is configured, the application automatically stores data inside:
+If a MongoDB connection is not available, the application automatically saves data to the local storage file:
 
 ```
 local_database.json
