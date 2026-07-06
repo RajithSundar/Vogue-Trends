@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, Heart, Sparkles, Search, TrendingUp, User, Shield, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -15,6 +16,7 @@ export default function Navbar({
   user,
   onOpenAuth,
 }) {
+  const navigate = useNavigate();
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -45,8 +47,8 @@ export default function Navbar({
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b border-editorial-line bg-editorial-bg/95 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <header className="sticky top-4 sm:top-6 mt-4 sm:mt-6 mb-12 sm:mb-16 z-40 mx-auto w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)] max-w-6xl rounded-[2rem] overflow-hidden bg-white border border-editorial-line premium-shadow glow-bg transition-all duration-500">
+        <div className="relative z-10 flex h-16 sm:h-20 w-full items-center justify-between px-6 sm:px-8 lg:px-10">
         
         {/* Hamburger & Logo Group */}
         <div className="flex items-center gap-3">
@@ -59,7 +61,7 @@ export default function Navbar({
           </button>
           
           {/* Logo and Brand */}
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab('shop')}>
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
             <span className="font-serif italic text-2xl font-bold tracking-tight text-editorial-ink">
               VOGUE<span className="font-sans not-italic text-xs font-semibold uppercase tracking-widest text-editorial-accent pl-1">.trends</span>
             </span>
@@ -69,7 +71,7 @@ export default function Navbar({
         {/* Navigation links */}
         <nav className="hidden xl:flex space-x-2">
           <button
-            onClick={() => setActiveTab('shop')}
+            onClick={() => navigate('/')}
             className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 ${
               activeTab === 'shop'
                 ? 'bg-editorial-ink text-white'
@@ -79,9 +81,22 @@ export default function Navbar({
             <ShoppingBag className="h-3.5 w-3.5" />
             Discover Shop
           </button>
+
+          <button
+            onClick={() => navigate('/deals')}
+            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 ${
+              activeTab === 'deals'
+                ? 'bg-editorial-ink text-white'
+                : 'text-stone-600 hover:bg-stone-100 hover:text-editorial-ink'
+            }`}
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Deals
+          </button>
+
           
           <button
-            onClick={() => setActiveTab('stylist')}
+            onClick={() => navigate('/stylist')}
             className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 relative ${
               activeTab === 'stylist'
                 ? 'bg-editorial-ink text-white'
@@ -99,7 +114,7 @@ export default function Navbar({
           </button>
 
           <button
-            onClick={() => setActiveTab('trends')}
+            onClick={() => navigate('/trends')}
             className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 ${
               activeTab === 'trends'
                 ? 'bg-editorial-ink text-white'
@@ -112,7 +127,7 @@ export default function Navbar({
 
           {user?.email === 'user' && (
             <button
-              onClick={() => setActiveTab('admin')}
+              onClick={() => navigate('/admin')}
               className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 ${
                 activeTab === 'admin'
                   ? 'bg-[#8B4513] text-white'
@@ -125,19 +140,7 @@ export default function Navbar({
           )}
         </nav>
 
-        {/* Search Bar */}
-        <div className="relative max-w-xs flex-1 hidden sm:block mx-4">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <Search className="h-4 w-4 text-stone-400" />
-          </div>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search linen, earthy, outerwear..."
-            className="w-full rounded-none border border-editorial-line bg-white py-1.5 pl-9 pr-4 text-xs text-editorial-ink outline-none transition-all focus:border-editorial-ink focus:ring-1 focus:ring-editorial-ink"
-          />
-        </div>
+
 
         {/* Action icons & AI Status */}
         <div className="flex items-center gap-1 sm:gap-4">
@@ -162,14 +165,7 @@ export default function Navbar({
 
           {/* Removed Mobile Trend, Stylist, Admin icons here since they are in drawer */}
 
-          {/* Mobile Search Toggle Button */}
-          <button
-            onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-            className="p-1.5 sm:p-2 rounded-none sm:hidden text-stone-600 hover:text-editorial-ink transition-colors touch-target"
-            title="Search"
-          >
-            <Search className="h-5 w-5" />
-          </button>
+
 
           {/* Wishlist Button */}
           <button
@@ -221,23 +217,7 @@ export default function Navbar({
 
       </div>
 
-      {isMobileSearchOpen && (
-        <div className="sm:hidden border-t border-editorial-line bg-white px-4 py-3 shadow-inner">
-          <div className="relative">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <Search className="h-4 w-4 text-stone-400" />
-            </div>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search linen, earthy, outerwear..."
-              className="w-full rounded-none border border-editorial-line bg-stone-50 py-2 pl-9 pr-4 text-base sm:text-xs text-editorial-ink outline-none"
-              autoFocus
-            />
-          </div>
-        </div>
-      )}
+
 
       </header>
 
@@ -272,26 +252,32 @@ export default function Navbar({
               </div>
               <div className="flex flex-col py-4 overflow-y-auto">
                 <button
-                  onClick={() => { setActiveTab('shop'); setIsMobileMenuOpen(false); }}
+                  onClick={() => { navigate('/'); setIsMobileMenuOpen(false); }}
                   className={`flex items-center gap-3 px-6 py-4 text-sm font-semibold tracking-wider uppercase transition-colors ${activeTab === 'shop' ? 'bg-stone-100 text-editorial-ink' : 'text-stone-600'}`}
                 >
                   <ShoppingBag className="h-5 w-5" /> Discover Shop
                 </button>
+<button
+            onClick={() => { navigate('/deals'); setIsMobileMenuOpen(false); }}
+                  className={`flex items-center gap-3 px-6 py-4 text-sm font-semibold tracking-wider uppercase transition-colors ${activeTab === 'deals' ? 'bg-stone-100 text-editorial-ink' : 'text-stone-600'}`}
+                >
+                  <Sparkles className="h-5 w-5" /> Deals
+                </button>
                 <button
-                  onClick={() => { setActiveTab('stylist'); setIsMobileMenuOpen(false); }}
+                  onClick={() => { navigate('/stylist'); setIsMobileMenuOpen(false); }}
                   className={`flex items-center gap-3 px-6 py-4 text-sm font-semibold tracking-wider uppercase transition-colors ${activeTab === 'stylist' ? 'bg-stone-100 text-editorial-ink' : 'text-stone-600'}`}
                 >
                   <Sparkles className="h-5 w-5 text-editorial-accent fill-editorial-accent" /> AI Stylist
                 </button>
                 <button
-                  onClick={() => { setActiveTab('trends'); setIsMobileMenuOpen(false); }}
+                  onClick={() => { navigate('/trends'); setIsMobileMenuOpen(false); }}
                   className={`flex items-center gap-3 px-6 py-4 text-sm font-semibold tracking-wider uppercase transition-colors ${activeTab === 'trends' ? 'bg-stone-100 text-editorial-ink' : 'text-stone-600'}`}
                 >
                   <TrendingUp className="h-5 w-5" /> Trend Board
                 </button>
                 {user?.email === 'user' && (
                   <button
-                    onClick={() => { setActiveTab('admin'); setIsMobileMenuOpen(false); }}
+                    onClick={() => { navigate('/admin'); setIsMobileMenuOpen(false); }}
                     className={`flex items-center gap-3 px-6 py-4 text-sm font-semibold tracking-wider uppercase transition-colors ${activeTab === 'admin' ? 'bg-[#8B4513]/10 text-[#8B4513]' : 'text-[#8B4513]'}`}
                   >
                     <Shield className="h-5 w-5" /> Admin Portal

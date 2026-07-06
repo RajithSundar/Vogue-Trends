@@ -1,10 +1,11 @@
 import express from 'express';
-import { getProducts, addProduct, updateProduct, deleteProduct } from '../controllers/productController.js';
+import { getProducts, getProductsByTag, addProduct, updateProduct, deleteProduct } from '../controllers/productController.js';
 import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
 router.get('/', getProducts);
+router.get('/tag/:tag', getProductsByTag);
 
 // Admin only routes for mutating products
 // Using authenticateToken, could add role check if roles existed, but for now just token auth

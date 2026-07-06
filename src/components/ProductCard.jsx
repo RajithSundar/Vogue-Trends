@@ -18,7 +18,7 @@ export default function ProductCard({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.3 }}
-      className="group relative flex flex-col overflow-hidden rounded-none border border-editorial-line bg-editorial-bg transition-colors duration-300 hover:bg-white hover:shadow-xs"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-editorial-line bg-white premium-shadow transition-all duration-300"
     >
       {/* Product Image and badges */}
       <div 

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { ShoppingBag, Sparkles, Filter, RefreshCw, X, ChevronDown, Flame, Heart, Info, ArrowRight } from 'lucide-react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { ShoppingBag, Sparkles, Filter, RefreshCw, X, ChevronDown, Flame, Heart, Info, ArrowRight, Search } from 'lucide-react';
 import Navbar from './components/Navbar.jsx';
+import CategoryCard from './components/CategoryCard.jsx';
 import ProductCard from './components/ProductCard.jsx';
 import ProductDetailModal from './components/ProductDetailModal.jsx';
 import PersonalizationHub from './components/PersonalizationHub.jsx';
@@ -8,41 +10,69 @@ import CartDrawer from './components/CartDrawer.jsx';
 import TrendSection from './components/TrendSection.jsx';
 import AuthModal from './components/AuthModal.jsx';
 import AdminPanel from './components/AdminPanel.jsx';
+import CollectionTab from './components/CollectionTab.jsx';
 import ThreeDCarousel from './components/ThreeDCarousel.jsx';
+import ThreeDCylinderCarousel from './components/lightswind/3DCarousel.tsx';
 import ImageMarquee from './components/ImageMarquee.jsx';
 import AnimatedButton from './components/AnimatedButton.jsx';
+import { InteractiveGridBackground } from './components/ui/InteractiveGridBackground.tsx';
+import { StarsBackgroundDemo } from './components/ui/background.tsx';
+import { TextReveal } from './components/ui/text-reveal.tsx';
+import SlidingCards from './components/lightswind/SlidingCards.tsx';
+import { CylinderCarousel } from '../components/motion/cylinder-carousel.tsx';
+import { TiltCard } from '../components/motion/tilt-card.tsx';
 import { motion, AnimatePresence } from 'motion/react';
 
-const carouselItems = [
+const CATEGORY_IMAGES = {
+  'All': 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80',
+  'Tops': 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
+  'Bottoms': 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&q=80',
+  'Outerwear': 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80',
+  'Footwear': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80',
+  'Accessories': 'https://images.unsplash.com/photo-1509319117193-57bab727e09d?w=600&q=80',
+  'Kids': 'https://images.unsplash.com/photo-1514090259021-bc13b91a9df2?w=600&q=80'
+};
+
+const categoryItems = [
   {
     id: 1,
-    title: "Organic Linens & Textured Suede",
-    brand: "Seasonal Edit",
-    description: "Curated tailored edits with premium organic fibers, grounding pigments, and structured drape overlays.",
-    tags: ["Sustainable", "Premium", "Minimalist"],
-    imageUrl: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=1200&auto=format&fit=crop&q=80",
+    title: "Men's Collection",
+    brand: "MEN",
+    description: "Explore tailored fits, rugged outerwear, and everyday essentials.",
+    tags: ["Tailored", "Rugged", "Essentials"],
+    imageUrl: "https://images.unsplash.com/photo-1516257984-b1b4d707412e?q=80&w=2940&auto=format&fit=crop",
     link: "#",
-    styleVibe: "Minimalist"
+    styleVibe: "Men"
   },
   {
     id: 2,
-    title: "Urban Utility & Techwear",
-    brand: "Streetwear",
-    description: "High-performance fabrics meeting avant-garde silhouettes for the modern cityscape.",
-    tags: ["Techwear", "Utility", "Urban"],
-    imageUrl: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200&auto=format&fit=crop&q=80",
+    title: "Women's Collection",
+    brand: "WOMEN",
+    description: "Discover elegant silhouettes, vibrant prints, and timeless pieces.",
+    tags: ["Elegant", "Vibrant", "Timeless"],
+    imageUrl: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2940&auto=format&fit=crop",
     link: "#",
-    styleVibe: "Streetwear"
+    styleVibe: "Women"
   },
   {
     id: 3,
-    title: "Timeless Tailoring",
-    brand: "Classic Elegant",
-    description: "Sartorial excellence with sharp lines, muted tones, and perfect proportions.",
-    tags: ["Tailored", "Classic", "Elegant"],
-    imageUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&auto=format&fit=crop&q=80",
+    title: "Outerwear Collection",
+    brand: "OUTERWEAR",
+    description: "Premium jackets and coats designed for any weather.",
+    tags: ["Warm", "Durable"],
+    imageUrl: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=2940&q=80",
     link: "#",
-    styleVibe: "Classic Elegant"
+    styleVibe: "Outerwear"
+  },
+  {
+    id: 4,
+    title: "Accessories",
+    brand: "ACCESSORIES",
+    description: "The perfect finishing touches to elevate any outfit.",
+    tags: ["Jewelry", "Bags", "Hats"],
+    imageUrl: "https://images.unsplash.com/photo-1509319117193-57bab727e09d?q=80&w=2940&auto=format&fit=crop",
+    link: "#",
+    styleVibe: "Accessories"
   }
 ];
 
@@ -56,8 +86,12 @@ const marqueeItems = [
 ];
 
 export default function App() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   // Navigation & Cart States
   const [activeTab, setActiveTab] = useState('shop');
+  const [activeExclusiveTag, setActiveExclusiveTag] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
@@ -73,13 +107,14 @@ export default function App() {
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  // Filters state
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [showWishlistOnly, setShowWishlistOnly] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState('All');
   const [selectedColor, setSelectedColor] = useState('All');
   const [maxPrice, setMaxPrice] = useState(220);
+  const [initialStylistQuery, setInitialStylistQuery] = useState(null);
+  const [triggerChatScroll, setTriggerChatScroll] = useState(0);
 
   // Personalization Track State
   const [browsingHistory, setBrowsingHistory] = useState([]);
@@ -200,6 +235,51 @@ export default function App() {
 
     fetchProducts();
   }, []);
+
+  // Sync URL pathname with internal navigation state
+  useEffect(() => {
+    const path = location.pathname;
+    if (path.startsWith('/shop/')) {
+      const tag = decodeURIComponent(path.slice(6));
+      setActiveExclusiveTag(tag);
+      setActiveTab('collection');
+    } else if (path === '/deals') {
+      setActiveTab('deals');
+      setActiveExclusiveTag(null);
+    } else if (path === '/stylist') {
+      setActiveTab('stylist');
+      setActiveExclusiveTag(null);
+    } else if (path === '/trends') {
+      setActiveTab('trends');
+      setActiveExclusiveTag(null);
+    } else if (path === '/admin') {
+      setActiveTab('admin');
+      setActiveExclusiveTag(null);
+    } else {
+      setActiveTab('shop');
+      setActiveExclusiveTag(null);
+    }
+  }, [location.pathname]);
+
+  // Dynamic offer cards derived from products collection
+  const dealTags = ['Summer Sale', 'New Arrivals', 'Members Only'];
+  const offerCards = useMemo(() => {
+    if (products.length === 0) return [];
+    return dealTags.map((tag, index) => {
+      const taggedProducts = products.filter(p => p.tags && p.tags.includes(tag));
+      const first = taggedProducts[0];
+      return {
+        id: index + 1,
+        tag,
+        title: tag,
+        description: taggedProducts.length > 0
+          ? `${taggedProducts.length} Products Available`
+          : 'Coming Soon',
+        productCount: taggedProducts.length,
+        imageUrl: first?.imageUrl || 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400&q=80'
+      };
+    });
+  }, [products]);
 
   // 2. LocalStorage & Server-DB sync helpers
   const saveCart = async (items) => {
@@ -417,7 +497,12 @@ export default function App() {
   const cartTotalCount = cartItems.reduce((acc, i) => acc + i.quantity, 0);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F9F8F6]">
+    <div className="min-h-screen flex flex-col bg-[#F9F8F6] relative overflow-hidden">
+      
+      {/* Global Interactive Background */}
+      <StarsBackgroundDemo />
+
+      <div className="relative z-10 flex flex-col flex-1">
       
       {/* Upper Navigation Rail */}
       <Navbar
@@ -425,19 +510,19 @@ export default function App() {
         setActiveTab={setActiveTab}
         cartCount={cartTotalCount}
         wishlistCount={wishlist.length}
-        onWishlistClick={() => {
-          setShowWishlistOnly(!showWishlistOnly);
-          if (activeTab !== 'shop') setActiveTab('shop');
-        }}
+onWishlistClick={() => {
+           setShowWishlistOnly(!showWishlistOnly);
+           if (activeTab !== 'shop') navigate('/');
+         }}
         openCart={() => setIsCartOpen(true)}
         browsingCount={browsingHistory.length}
         searchQuery={searchQuery}
-        setSearchQuery={(val) => {
-          setSearchQuery(val);
-          if (val && activeTab !== 'shop') {
-            setActiveTab('shop');
-          }
-        }}
+setSearchQuery={(val) => {
+           setSearchQuery(val);
+           if (val && activeTab !== 'shop') {
+             navigate('/');
+           }
+         }}
         user={user}
         onOpenAuth={() => setIsAuthOpen(true)}
       />
@@ -445,255 +530,249 @@ export default function App() {
       {/* Main Container Stage */}
       <main className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         
+        {/* TAB 5: DEALS PAGE */}
+        {activeTab === 'deals' && (
+          <div className="space-y-8 min-h-[60vh] flex flex-col items-center justify-center py-12">
+             <h2 className="text-4xl md:text-5xl font-serif font-bold text-editorial-ink">Exclusive Deals & Offers</h2>
+             <p className="text-editorial-muted text-center max-w-lg mb-8">Discover our latest promotions, flash sales, and new arrivals. Stay ahead of the trends.</p>
+             <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-8">
+                {offerCards.map(c => (
+                   <CategoryCard
+                     key={c.id}
+                     id={c.id}
+                     tag={c.tag}
+                     title={c.title}
+                     subtitle={c.productCount > 0 ? `${c.productCount} Products Available` : c.description}
+                     imageUrl={c.imageUrl}
+                   />
+                ))}
+             </div>
+          </div>
+        )}
+
         {/* TAB 1: STORE / SHOP DISCOVERY VIEW */}
         {activeTab === 'shop' && (
           <div className="space-y-8">
-            
-            {/* Elegant Hero Banner - Replaced with Lightswind 3D Carousel */}
-            <div className="w-full -mx-4 sm:-mx-6 lg:-mx-8">
-              <ThreeDCarousel 
-                items={carouselItems}
-                autoRotate={true}
-                rotateInterval={5000}
-                cardHeight={480}
-                onExplore={(item) => {
-                  handleSelectTrendStyle(item.styleVibe);
-                  window.scrollTo({ top: 800, behavior: 'smooth' });
-                }}
-              />
-              <ImageMarquee items={marqueeItems} speed={60} />
+            {/* HERO SECTION WITH INTERACTIVE GRID */}
+            <TiltCard className="w-full max-w-6xl mx-auto mb-16" max={5} glare={true}>
+              <div 
+                className="relative w-full h-[300px] md:h-[400px] rounded-[2rem] overflow-hidden bg-white border border-editorial-line premium-shadow flex flex-col items-center justify-center p-6 group transition-all duration-500 glow-bg"
+              >
+                  {/* Clickable Background overlay */}
+                  <div onClick={() => {
+                    navigate('/stylist');
+                    setTriggerChatScroll(prev => prev + 1);
+                  }} className="absolute inset-0 z-0 cursor-pointer"></div>
+                  
+                  <div className="relative z-10 flex flex-col items-center pointer-events-auto">
+                    <div onClick={() => {
+                      navigate('/stylist');
+                      setTriggerChatScroll(prev => prev + 1);
+                    }} className="cursor-pointer mb-8">
+                      <TextReveal text="CONSULT AI STYLIST." stagger={0.08} delay={1.2} className="text-4xl md:text-6xl font-serif italic text-editorial-ink font-bold text-center drop-shadow-sm tracking-tighter group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                    
+                    <div className="w-full max-w-lg relative group/input">
+                      <input 
+                        type="text" 
+                        placeholder="What should I wear for..." 
+                        onKeyDown={(e) => {
+if (e.key === 'Enter' && e.target.value.trim()) {
+                               setInitialStylistQuery(e.target.value);
+                               navigate('/stylist');
+                               setTriggerChatScroll(prev => prev + 1);
+                           }
+                        }}
+                         className="w-full px-8 py-4 rounded-full bg-stone-50 border-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.06)] outline-none focus:bg-white focus:shadow-[inset_0_1px_2px_rgba(0,0,0,0.03),_0_4px_12px_rgba(0,0,0,0.05)] text-editorial-ink placeholder:text-stone-400 font-sans transition-all pr-14 text-sm md:text-base"
+                      />
+                      <button 
+                        onClick={(e) => {
+                          const val = e.currentTarget.previousSibling.value;
+if (val.trim()) {
+                             setInitialStylistQuery(val);
+                             navigate('/stylist');
+                             setTriggerChatScroll(prev => prev + 1);
+                          }
+                        }}
+                        className="absolute right-2 top-2 bottom-2 aspect-square bg-editorial-ink text-white rounded-full flex items-center justify-center hover:bg-editorial-accent transition-colors shadow-sm"
+                      >
+                        &rarr;
+                      </button>
+                    </div>
+                  </div>
+              </div>
+            </TiltCard>
+
+
+
+            {/* CURRENT OFFERS SLIDING CARDS */}
+            <div className="w-full max-w-6xl mx-auto mb-20 flex flex-col md:flex-row items-center gap-12 bg-white p-8 md:p-12 rounded-[2rem] border border-editorial-line premium-shadow glow-bg">
+              
+              <div className="flex-1 space-y-5 relative z-10">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-[10px] font-bold uppercase tracking-widest mb-2">
+                  <Flame className="w-3 h-3" /> Flash Deals
+                </div>
+                <h2 className="font-serif text-4xl font-bold text-editorial-ink tracking-tight leading-tight">
+                  Exclusive Offers <br/><span className="italic font-light text-stone-500">Just for You.</span>
+                </h2>
+                <p className="text-stone-500 leading-relaxed text-sm max-w-md">
+                  Swipe through our latest promotions and popular picks. Grab these limited-time deals before they're gone!
+                </p>
+                <div className="pt-4">
+                  <AnimatedButton onClick={() => navigate('/deals')} variant="dark" icon="arrow">
+                    Shop All Deals
+                  </AnimatedButton>
+                </div>
+              </div>
+              
+              <div className="flex-1 flex justify-center min-h-[380px] w-full relative z-10">
+                <SlidingCards 
+                  cards={offerCards.map(c => ({
+                    id: c.id,
+                    title: c.title,
+                    tag: c.tag,
+                    description: c.description,
+                    icon: <img src={c.imageUrl} className="w-full h-full object-cover rounded-xl" />,
+                    bgClass: 'bg-white'
+                  }))} 
+                  autoPlay={true} 
+                  autoPlayInterval={3500} 
+                  cardSize="w-20 h-20" 
+                  className="mx-auto" 
+                  onCardClick={(index) => {
+                    navigate(`/shop/${encodeURIComponent(offerCards[index].tag)}`);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                />
+              </div>
             </div>
 
-            {/* Quick info cards for the user style profile */}
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-              <div className="relative bg-white p-6 border border-editorial-line space-y-4 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
-                <div className="flex-1 space-y-2">
-                  <div className="flex items-center gap-1.5 text-editorial-accent">
-                    <Sparkles className="h-4 w-4 fill-editorial-accent" />
-                    <span className="text-[10px] font-semibold uppercase tracking-wider font-mono">Personalizer Active</span>
+
+            {/* NEW CATALOGUE LAYOUT */}
+            {!selectedCategory ? (
+              <div className="w-full max-w-6xl mx-auto mb-20 bg-white border border-editorial-line premium-shadow rounded-[2rem] p-6 sm:p-8 md:p-12 relative overflow-hidden flex flex-col space-y-8 sm:space-y-12 items-center z-20 glow-bg">
+                <div className="text-center">
+                  <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-editorial-ink">The Catalogue</h2>
+                  <p className="text-xs text-stone-500 font-mono mt-2 uppercase tracking-widest">Select a Category</p>
+                </div>
+                
+                 <div className="w-full">
+                    {/* Mobile: Horizontal Scrolling Container */}
+                    <div className="w-full sm:hidden">
+                      <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory py-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                        {['All', 'Tops', 'Bottoms', 'Outerwear', 'Footwear', 'Accessories', 'Kids'].map((cat) => (
+                         <div 
+                           key={cat}
+                           onClick={() => setSelectedCategory(cat)}
+                           className="snap-center flex-shrink-0 w-[180px] h-[260px] cursor-pointer rounded-[2rem] transition-all duration-300 border border-[#e5e5e5] bg-white relative group hover:border-editorial-ink/30 premium-shadow"
+                         >
+                            <div className="absolute inset-0 rounded-[2rem] overflow-hidden">
+                              <img src={CATEGORY_IMAGES[cat]} alt={cat} className="absolute inset-0 w-full h-full object-cover brightness-[0.85] contrast-[1.1] transition-all duration-500 group-hover:brightness-[0.95]" />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity duration-500 group-hover:opacity-90"></div>
+                              <div className="absolute inset-0 z-10 p-4 flex flex-col items-center justify-center">
+                                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md tracking-wide text-center leading-tight">{cat}</h3>
+                                <p className="text-[9px] uppercase tracking-widest mt-2 text-white/90 font-mono drop-shadow-sm font-semibold text-center">View {cat === 'All' ? 'Everything' : 'Collection'}</p>
+                              </div>
+                            </div>
+                         </div>
+                       ))}
+                      </div>
+                    </div>
+
+                    {/* Tablet & Desktop: 3D Cylinder Carousel */}
+                    <div className="hidden sm:block">
+                      <CylinderCarousel 
+                        visibleItems={5} 
+                        itemWidth={220} 
+                        itemHeight={320} 
+                        height={460} 
+                        radius={2000} 
+                        minScale={0.75} 
+                        className="w-full"
+                      >
+                         {['All', 'Tops', 'Bottoms', 'Outerwear', 'Footwear', 'Accessories', 'Kids'].map((cat) => (
+                           <div 
+                             key={cat} 
+                             onPointerDownCapture={() => setSelectedCategory(cat)}
+                             className="w-[220px] h-[320px] mx-auto cursor-pointer rounded-[2rem] transition-all duration-300 border border-[#e5e5e5] bg-white relative group hover:border-editorial-ink/30 premium-shadow"
+                           >
+                              <div className="absolute inset-0 rounded-[2rem] overflow-hidden">
+                                <img src={CATEGORY_IMAGES[cat]} alt={cat} className="absolute inset-0 w-full h-full object-cover brightness-[0.85] contrast-[1.1] transition-all duration-500 group-hover:brightness-[0.95]" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity duration-500 group-hover:opacity-90"></div>
+                                <div className="absolute inset-0 z-10 p-6 flex flex-col items-center justify-center">
+                                  <h3 className="font-serif text-2xl md:text-3xl font-bold text-white drop-shadow-md tracking-wide text-center leading-tight">{cat}</h3>
+                                  <p className="text-[10px] uppercase tracking-widest mt-3 text-white/90 font-mono drop-shadow-sm font-semibold text-center">View {cat === 'All' ? 'Everything' : 'Collection'}</p>
+                                </div>
+                              </div>
+                           </div>
+                         ))}
+                      </CylinderCarousel>
+                    </div>
+                 </div>
+              </div>
+            ) : (
+              <div className="w-full flex flex-col space-y-12 items-center relative z-20">
+                <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 mt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-4 border-b border-editorial-line gap-4">
+                     <div>
+                       <button onClick={() => setSelectedCategory(null)} className="text-xs font-mono text-stone-500 hover:text-editorial-ink uppercase tracking-widest mb-2 flex items-center gap-1 transition-colors group">
+                          <span className="group-hover:-translate-x-1 transition-transform">&larr;</span> Back to Categories
+                       </button>
+                       <h3 className="font-serif text-3xl md:text-4xl font-bold text-editorial-ink tracking-tight">
+                         {selectedCategory === 'All' ? 'All Pieces' : `${selectedCategory} Collection`}
+                       </h3>
+                     </div>
+                     <span className="text-xs font-mono text-stone-600 uppercase tracking-widest bg-stone-100 px-4 py-2 rounded-full font-semibold">{filteredProducts.length} Items</span>
                   </div>
-                  {preferredStyle ? (
-                    <div>
-                      <p className="text-base font-serif italic text-editorial-ink">
-                        {preferredStyle} Aesthetic
-                      </p>
-                      <p className="text-[10px] text-editorial-text font-mono mt-1">
-                        Decorating catalog items with custom <span className="text-editorial-ink font-bold">Style Match</span> tags.
-                      </p>
+                  
+                  {isLoadingProducts ? (
+                    <div className="text-center py-24 space-y-3">
+                      <div className="h-10 w-10 animate-spin border-4 border-stone-200 border-t-stone-900 rounded-full mx-auto" />
+                    </div>
+                  ) : filteredProducts.length === 0 ? (
+                    <div className="text-center py-20 bg-white rounded-[2rem] border border-stone-200/50 space-y-3 shadow-sm">
+                      <p className="text-sm font-semibold text-stone-700">No matching garments found</p>
+                      <button
+                        onClick={() => setSelectedCategory(null)}
+                        className="mt-2 rounded-full bg-editorial-ink px-6 py-3 text-xs font-bold text-white uppercase tracking-widest hover:bg-black transition-colors"
+                      >
+                        Reset Category
+                      </button>
                     </div>
                   ) : (
-                    <div>
-                      <p className="text-xs text-editorial-text leading-normal">
-                        Stylist is currently idle. Click and view products to activate personalized matching tags!
-                      </p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+                      <AnimatePresence>
+                        {filteredProducts.map((p) => (
+                          <ProductCard
+                             key={p.id}
+                             product={p}
+                             onViewDetails={setSelectedProduct}
+                             isWishlisted={wishlist.includes(p.id)}
+                             toggleWishlist={handleToggleWishlist}
+                             preferredStyle={preferredStyle}
+                          />
+                        ))}
+                      </AnimatePresence>
                     </div>
                   )}
                 </div>
-                
-                <AnimatedButton
-                  onClick={() => setActiveTab('stylist')}
-                  variant="dark"
-                  icon="arrow"
-                  fullWidth={false}
-                  className="w-full md:w-auto shrink-0 shadow-md"
-                >
-                  Consult AI Stylist
-                </AnimatedButton>
               </div>
-            </div>
-
-            {/* Shop Listing Grid Layout */}
-            <div className="flex flex-col xl:flex-row gap-8 items-start">
-              
-              {/* Desktop & Mobile Filters Sidebar */}
-              <div className="w-full xl:w-64 shrink-0">
-                <div className="xl:hidden mb-4">
-                  <button
-                    onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
-                    className="w-full bg-editorial-ink text-white py-3 text-xs font-mono font-bold uppercase tracking-[0.15em] flex items-center justify-center gap-2 rounded-none touch-target"
-                  >
-                    <Filter className="h-4 w-4 -ml-1" />
-                    <span className="translate-x-[0.075em]">{isMobileFiltersOpen ? 'Hide Filters' : 'Show Filters'}</span>
-                  </button>
-                </div>
-                <aside className={`${isMobileFiltersOpen ? 'block' : 'hidden'} xl:block bg-white border border-editorial-line rounded-none p-5 sticky top-24 mb-6 xl:mb-0`}>
-                  <div className="flex items-center justify-between border-b border-editorial-line pb-3 mb-4">
-                  <span className="text-xs font-bold text-editorial-ink uppercase tracking-widest flex items-center gap-1.5 font-mono">
-                    <Filter className="h-3.5 w-3.5" /> Filter Catalog
-                  </span>
-                  <button
-                    onClick={resetAllFilters}
-                    className="text-[10px] text-stone-400 hover:text-editorial-ink font-semibold uppercase tracking-wider font-mono"
-                  >
-                    Reset
-                  </button>
-                </div>
-
-                <div className="space-y-5 text-sm">
-                  {/* Category Filter */}
-                  <div className="space-y-2">
-                    <span className="text-[10px] font-semibold text-stone-400 uppercase tracking-widest font-mono block">Category</span>
-                    <div className="flex flex-col gap-1">
-                      {['All', 'Tops', 'Bottoms', 'Outerwear', 'Footwear', 'Accessories'].map((cat) => (
-                        <button
-                          key={cat}
-                          onClick={() => setSelectedCategory(cat)}
-                          className={`text-left px-2.5 py-1.5 rounded-none text-xs font-mono uppercase tracking-wider transition-all ${
-                            selectedCategory === cat
-                              ? 'bg-editorial-ink text-white font-bold'
-                              : 'text-stone-600 hover:bg-stone-50 hover:text-editorial-ink'
-                          }`}
-                        >
-                          {cat}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Style Filter */}
-                  <div className="space-y-2">
-                    <span className="text-[10px] font-semibold text-stone-400 uppercase tracking-widest font-mono block">Style Vibe</span>
-                    <div className="flex flex-col gap-1">
-                      {['All', 'Minimalist', 'Streetwear', 'Athleisure', 'Classic Elegant', 'Bohemian'].map((sty) => (
-                        <button
-                          key={sty}
-                          onClick={() => setSelectedStyle(sty)}
-                          className={`text-left px-2.5 py-1.5 rounded-none text-xs font-mono uppercase tracking-wider transition-all ${
-                            selectedStyle === sty
-                              ? 'bg-editorial-ink text-white font-bold'
-                              : 'text-stone-600 hover:bg-stone-50 hover:text-editorial-ink'
-                          }`}
-                        >
-                          {sty}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Colors Filter */}
-                  <div className="space-y-2">
-                    <span className="text-[10px] font-semibold text-stone-400 uppercase tracking-widest font-mono block">Filter Color</span>
-                    <div className="relative">
-                      <select
-                        value={selectedColor}
-                        onChange={(e) => setSelectedColor(e.target.value)}
-                        className="w-full bg-stone-50 border border-editorial-line rounded-none px-2.5 py-1.5 text-xs text-editorial-ink outline-none font-mono"
-                      >
-                        <option value="All">All Colors</option>
-                        {availableColors.map((col) => (
-                          <option key={col} value={col}>
-                            {col}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Max Price Filter */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center text-[10px] font-semibold text-stone-400 uppercase tracking-widest font-mono">
-                      <span>Max Price</span>
-                      <span className="font-mono text-editorial-ink font-bold">${maxPrice}</span>
-                    </div>
-                    <input
-                      type="range"
-                      min="25"
-                      max="220"
-                      step="5"
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(Number(e.target.value))}
-                      className="w-full accent-editorial-accent cursor-pointer"
-                    />
-                  </div>
-                </div>
-                </aside>
-              </div>
-
-              {/* Main Catalog grid section */}
-              <div className="flex-1 space-y-6">
-                
-                {/* Visual stats and active filters header */}
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div>
-                    <h3 className="font-serif text-3xl font-normal text-editorial-ink tracking-tight">
-                      Curated Wardrobe Catalogue
-                    </h3>
-                    <p className="text-xs text-editorial-muted mt-0.5">
-                      Showing {filteredProducts.length} premium pieces available for pairing
-                    </p>
-                  </div>
-
-                  {/* Display active filter status labels */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {selectedCategory !== 'All' && (
-                      <span className="border border-editorial-line bg-white text-stone-700 rounded-none px-2.5 py-0.5 text-[9px] font-mono uppercase">
-                        {selectedCategory}
-                      </span>
-                    )}
-                    {selectedStyle !== 'All' && (
-                      <span className="border border-editorial-line bg-white text-stone-700 rounded-none px-2.5 py-0.5 text-[9px] font-mono uppercase">
-                        {selectedStyle}
-                      </span>
-                    )}
-                    {selectedColor !== 'All' && (
-                      <span className="border border-editorial-line bg-white text-stone-700 rounded-none px-2.5 py-0.5 text-[9px] font-mono uppercase">
-                        {selectedColor}
-                      </span>
-                    )}
-                    {maxPrice < 220 && (
-                      <span className="border border-editorial-line bg-white text-stone-700 rounded-none px-2.5 py-0.5 text-[9px] font-mono uppercase">
-                        &lt; ${maxPrice}
-                      </span>
-                    )}
-                    {showWishlistOnly && (
-                      <span className="border border-[#8B4513] bg-[#8B4513]/10 text-[#8B4513] rounded-none px-2.5 py-0.5 text-[9px] font-mono uppercase flex items-center gap-1">
-                        <Heart className="h-2.5 w-2.5 fill-current" /> Liked Only
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Grid */}
-                {isLoadingProducts ? (
-                  <div className="text-center py-24 space-y-3">
-                    <div className="h-10 w-10 animate-spin border-4 border-stone-200 border-t-stone-900 rounded-full mx-auto" />
-                    <p className="text-xs text-stone-500 font-mono">Unpacking boutique wardrobe...</p>
-                  </div>
-                ) : filteredProducts.length === 0 ? (
-                  <div className="text-center py-20 bg-stone-50 rounded-2xl border border-stone-200/50 space-y-3">
-                    <p className="text-sm font-semibold text-stone-700">No matching garments found</p>
-                    <p className="text-xs text-stone-500 max-w-sm mx-auto">
-                      Adjust your category, style filters, or max price range to see our full available line.
-                    </p>
-                    <button
-                      onClick={resetAllFilters}
-                      className="mt-2 rounded-xl bg-stone-900 px-4 py-2 text-xs font-bold text-white"
-                    >
-                      Reset All Filters
-                    </button>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-6">
-                    <AnimatePresence>
-                      {filteredProducts.map((p) => (
-                        <ProductCard
-                           key={p.id}
-                           product={p}
-                           onViewDetails={setSelectedProduct}
-                           isWishlisted={wishlist.includes(p.id)}
-                           toggleWishlist={handleToggleWishlist}
-                           preferredStyle={preferredStyle}
-                        />
-                      ))}
-                    </AnimatePresence>
-                  </div>
-                )}
-
-              </div>
-
-            </div>
+            )}
 
           </div>
+        )}
+
+        {/* TAB 1.5: EXCLUSIVE COLLECTION */}
+        {activeTab === 'collection' && activeExclusiveTag && (
+          <CollectionTab 
+            activeTag={activeExclusiveTag}
+            products={products}
+            user={user}
+            token={token}
+            onProductClick={setSelectedProduct}
+            setIsAuthOpen={setIsAuthOpen}
+            setUser={setUser}
+          />
         )}
 
         {/* TAB 2: AI STYLIST / PERSONALIZATION DASHBOARD */}
@@ -703,6 +782,9 @@ export default function App() {
             browsingHistory={browsingHistory}
             onProductClick={setSelectedProduct}
             onAddMultipleToCart={handleAddMultipleToCart}
+            initialStylistQuery={initialStylistQuery}
+            onClearInitialQuery={() => setInitialStylistQuery(null)}
+            triggerChatScroll={triggerChatScroll}
           />
         )}
 
@@ -772,7 +854,9 @@ export default function App() {
           </p>
         </div>
       </footer>
-
+      </div>
     </div>
   );
 }
+ 
+ 

@@ -14,6 +14,10 @@
   --color-editorial-line: #E5E5E2;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Custom visual styling to give the app a premium editorial boutique feel */
 body {
   font-family: var(--font-sans);
@@ -50,5 +54,31 @@ input, select, textarea {
 
 ::-webkit-scrollbar-thumb {
   background: #141414;
+}
+
+/* Cohesive soft warm glow background effect */
+.glow-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-bg::before {
+  content: "";
+  position: absolute;
+  top: -5rem;
+  right: -5rem;
+  width: 16rem;
+  height: 16rem;
+  background-color: var(--color-editorial-accent);
+  opacity: 0.1;
+  border-radius: 50%;
+  filter: blur(48px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Premium floating card shadows */
+.premium-shadow {
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15) !important;
 }
 

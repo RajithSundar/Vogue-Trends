@@ -60,9 +60,12 @@ export default function PersonalizationHub({
   browsingHistory,
   onProductClick,
   onAddMultipleToCart,
+  initialStylistQuery,
+  onClearInitialQuery,
+  triggerChatScroll,
 }) {
   // Navigation tabs within Hub
-  const [hubTab, setHubTab] = useState('capsules');
+  const [hubTab, setHubTab] = useState(initialStylistQuery ? 'chat' : 'capsules');
 
   // Bespoke Capsules states
   const [loading, setLoading] = useState(false);
@@ -232,6 +235,29 @@ Here are some ideas to start:
     }
   };
 
+  // Handle incoming initial query from the Hero banner
+  React.useEffect(() => {
+    if (initialStylistQuery) {
+      handleSendMessage(initialStylistQuery);
+      if (onClearInitialQuery) onClearInitialQuery();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialStylistQuery]);
+
+  // Handle trigger for scrolling to chat
+  React.useEffect(() => {
+    if (triggerChatScroll > 0) {
+      setHubTab('chat');
+      // Wait for the route transition and tab switch to render before scrolling
+      setTimeout(() => {
+        const chatEl = document.getElementById('atelier-chat');
+        if (chatEl) {
+          chatEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 150);
+    }
+  }, [triggerChatScroll]);
+
   // Loading animation message cycle
   const [loadingStep, setLoadingStep] = useState(0);
   React.useEffect(() => {
@@ -257,7 +283,12 @@ Here are some ideas to start:
   ];
 
   return (
-    <div className="space-y-10 py-4">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="space-y-10 py-4"
+    >
       
       {/* Intro Banner */}
       <div className="relative overflow-hidden rounded-none bg-editorial-ink border border-editorial-line p-6 sm:p-10 text-[#F9F8F6] shadow-none">
@@ -639,13 +670,22 @@ Here are some ideas to start:
 
             {/* TAB CONTENT: ATELIER INTERACTIVE CHAT */}
             {hubTab === 'chat' && (
-              <div className="flex flex-col h-[500px] border border-editorial-line bg-[#F9F8F6]/30">
+              <motion.div 
+                id="atelier-chat" 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
+                className="flex flex-col h-[500px] border border-editorial-line bg-[#F9F8F6]/30 scroll-mt-32"
+              >
                 
                 {/* Message Log */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-4">
                   {messages.map((msg, idx) => (
-                    <div
+                    <motion.div
                       key={idx}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, ease: "easeOut", delay: idx === 0 ? 0.35 : 0 }}
                       className={`flex flex-col max-w-[85%] ${
                         msg.role === 'user' ? 'ml-auto items-end' : 'mr-auto items-start'
                       }`}
@@ -701,7 +741,7 @@ Here are some ideas to start:
                           ))}
                         </div>
                       )}
-                    </div>
+                    </motion.div>
                   ))}
 
                   {/* LOADING DOTS */}
@@ -715,7 +755,12 @@ Here are some ideas to start:
                 </div>
 
                 {/* Quick prompts buttons bar */}
-                <div className="px-4 py-2 border-t border-editorial-line bg-[#F9F8F6] flex gap-2 overflow-x-auto shrink-0 scrollbar-none">
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, ease: "easeOut", delay: 0.5 }}
+                  className="px-4 py-2 border-t border-editorial-line bg-[#F9F8F6] flex gap-2 overflow-x-auto shrink-0 scrollbar-none"
+                >
                   {quickPrompts.map((promptText, pIdx) => (
                     <button
                       key={pIdx}
@@ -725,10 +770,15 @@ Here are some ideas to start:
                       {promptText}
                     </button>
                   ))}
-                </div>
+                </motion.div>
 
                 {/* Input Area */}
-                <div className="p-3 border-t border-editorial-line bg-white flex gap-2 items-center shrink-0">
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, ease: "easeOut", delay: 0.65 }}
+                  className="p-3 border-t border-editorial-line bg-white flex gap-2 items-center shrink-0"
+                >
                   <input
                     type="text"
                     value={inputMessage}
@@ -745,9 +795,9 @@ Here are some ideas to start:
                   >
                     <Send className="h-4 w-4" />
                   </button>
-                </div>
+                </motion.div>
 
-              </div>
+              </motion.div>
             )}
 
           </div>
@@ -755,6 +805,6 @@ Here are some ideas to start:
 
       </div>
 
-    </div>
+    </motion.div>
   );
 }

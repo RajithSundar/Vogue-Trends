@@ -29,7 +29,8 @@ export async function register(req, res) {
       email: email.toLowerCase(),
       passwordHash,
       name,
-      preferredStyle: ''
+      preferredStyle: '',
+      isMember: false
     });
 
     const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
@@ -40,7 +41,8 @@ export async function register(req, res) {
         id: user._id,
         email: user.email,
         name: user.name,
-        preferredStyle: user.preferredStyle
+        preferredStyle: user.preferredStyle,
+        isMember: user.isMember
       }
     });
   } catch (error) {
@@ -74,7 +76,8 @@ export async function login(req, res) {
         id: user._id,
         email: user.email,
         name: user.name,
-        preferredStyle: user.preferredStyle
+        preferredStyle: user.preferredStyle,
+        isMember: user.isMember
       }
     });
   } catch (error) {
@@ -104,7 +107,8 @@ export async function googleLogin(req, res) {
         email,
         name,
         passwordHash: crypto.randomBytes(16).toString('hex'),
-        preferredStyle: ''
+        preferredStyle: '',
+        isMember: false
       });
     }
 
@@ -116,7 +120,8 @@ export async function googleLogin(req, res) {
         id: user._id,
         email: user.email,
         name: user.name,
-        preferredStyle: user.preferredStyle
+        preferredStyle: user.preferredStyle,
+        isMember: user.isMember
       }
     });
   } catch (error) {
@@ -135,9 +140,36 @@ export async function getMe(req, res) {
       id: user._id,
       email: user.email,
       name: user.name,
-      preferredStyle: user.preferredStyle
+      preferredStyle: user.preferredStyle,
+      isMember: user.isMember
     });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
+  }
+}
+
+export async function subscribe(req, res) {
+  try {
+    const user = await DB.users.findOne({ _id: req.user.id });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Process mock payment/subscription logic here
+    await DB.users.updateOne({ _id: req.user.id }, { $set: { isMember: true } });
+    
+    res.json({
+      message: 'Subscription successful',
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        preferredStyle: user.preferredStyle,
+        isMember: true
+      }
+    });
+  } catch (error) {
+    console.error('Error during subscription:', error);
+    res.status(500).json({ message: 'Server error during subscription' });
   }
 }

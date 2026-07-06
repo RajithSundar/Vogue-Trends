@@ -1,0 +1,5 @@
+bunx --bun shadcn add @beui/tilt-card
+
+bunx --bun shadcn add @beui/marquee
+
+bunx --bun shadcn add @beui/cylinder-carousel
