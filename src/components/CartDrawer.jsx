@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, ShoppingBag, Trash2, ChevronRight, Loader2, Database, CheckCircle } from 'lucide-react';
+import { X, ShoppingBag, Trash2, ChevronRight, Loader2, Database, CheckCircle, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { getApiUrl } from '../utils/api.js';
 
@@ -20,8 +20,14 @@ export default function CartDrawer({
     email: 'jane.doe@vogue.com',
     address: '108 Fashion Ave, Suite 400',
     city: 'New York, NY 10018',
-    card: '•••• •••• •••• 4242',
+    address: '108 Fashion Ave, Suite 400',
+    city: 'New York, NY 10018',
+    cardNumber: '4242424242424242',
+    expiryDate: '12/26',
+    cvv: '123',
   });
+
+  const [paymentStatus, setPaymentStatus] = useState('idle'); // 'idle', 'processing', 'success'
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [checkoutError, setCheckoutError] = useState('');
@@ -69,8 +75,31 @@ export default function CartDrawer({
 
   const handleCheckout = async (e) => {
     e.preventDefault();
+    e.preventDefault();
     setCheckoutError('');
+
+    // Simulated Payment Validation
+    const { cardNumber, expiryDate, cvv } = checkoutForm;
+    if (!cardNumber || cardNumber.replace(/\s/g, '').length < 15) {
+      setCheckoutError('Invalid card number.');
+      return;
+    }
+    if (!expiryDate || !/^(0[1-9]|1[0-2])\/?([0-9]{2})$/.test(expiryDate)) {
+      setCheckoutError('Invalid expiry date. Use MM/YY format.');
+      return;
+    }
+    if (!cvv || cvv.length < 3) {
+      setCheckoutError('Invalid CVV.');
+      return;
+    }
+
+    setPaymentStatus('processing');
     setIsSubmitting(true);
+
+    // Simulate secure payment processing delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setPaymentStatus('success');
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     const orderPayload = {
       items: cartItems.map(item => ({
@@ -356,18 +385,67 @@ export default function CartDrawer({
                       />
                     </div>
 
-                    <div className="pt-2">
-                      <label className="block text-[10px] font-mono font-bold uppercase tracking-widest text-stone-400 mb-1">
-                        Demo Card Details (Safe Mocked)
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={checkoutForm.card}
-                        onChange={(e) => setCheckoutForm({ ...checkoutForm, card: e.target.value })}
-                        className="w-full rounded-none border border-editorial-line bg-stone-50 px-4 py-2.5 text-xs text-stone-400 outline-none"
-                        readOnly
-                      />
+                    <div className="pt-4 border-t border-editorial-line space-y-3">
+                      <div className="flex items-center gap-2 mb-2 text-stone-600">
+                        <Lock className="h-3 w-3 text-emerald-600" />
+                        <label className="block text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-800">
+                          Secure Payment Gateway
+                        </label>
+                      </div>
+                      
+                      <div className="space-y-3 p-3 bg-stone-50 border border-editorial-line rounded-lg">
+                        <div>
+                          <label className="block text-[9px] font-mono font-bold uppercase tracking-widest text-stone-500 mb-1">Card Number</label>
+                          <input
+                            type="text"
+                            required
+                            maxLength="19"
+                            placeholder="0000 0000 0000 0000"
+                            value={checkoutForm.cardNumber}
+                            onChange={(e) => {
+                              // Auto-format card number with spaces
+                              let val = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+                              let formatted = val.match(/.{1,4}/g)?.join(' ') || val;
+                              setCheckoutForm({ ...checkoutForm, cardNumber: formatted });
+                            }}
+                            className="w-full rounded border border-stone-200 bg-white px-3 py-2 text-xs font-mono outline-none focus:border-editorial-ink"
+                          />
+                        </div>
+                        
+                        <div className="flex gap-3">
+                          <div className="flex-1">
+                            <label className="block text-[9px] font-mono font-bold uppercase tracking-widest text-stone-500 mb-1">Expiry Date</label>
+                            <input
+                              type="text"
+                              required
+                              maxLength="5"
+                              placeholder="MM/YY"
+                              value={checkoutForm.expiryDate}
+                              onChange={(e) => {
+                                let val = e.target.value.replace(/\D/g, '');
+                                if (val.length >= 2) {
+                                  val = val.substring(0,2) + '/' + val.substring(2,4);
+                                }
+                                setCheckoutForm({ ...checkoutForm, expiryDate: val });
+                              }}
+                              className="w-full rounded border border-stone-200 bg-white px-3 py-2 text-xs font-mono outline-none focus:border-editorial-ink"
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <label className="block text-[9px] font-mono font-bold uppercase tracking-widest text-stone-500 mb-1">CVV</label>
+                            <input
+                              type="password"
+                              required
+                              maxLength="4"
+                              placeholder="123"
+                              value={checkoutForm.cvv}
+                              onChange={(e) => setCheckoutForm({ ...checkoutForm, cvv: e.target.value.replace(/\D/g, '') })}
+                              className="w-full rounded border border-stone-200 bg-white px-3 py-2 text-xs font-mono outline-none focus:border-editorial-ink"
+                            />
+                          </div>
+                        </div>
+                        <p className="text-[8px] text-stone-400 font-mono text-center">Your payment information is encrypted and securely processed.</p>
+                      </div>
                     </div>
 
                     {/* Promo Code Discount Segment */}
@@ -445,14 +523,15 @@ export default function CartDrawer({
                       </button>
                       <button
                         type="submit"
-                        disabled={isSubmitting}
-                        className="flex-1 rounded-none bg-editorial-ink py-3 text-[10px] font-mono uppercase tracking-widest font-bold text-white shadow-none hover:bg-editorial-accent transition-colors flex items-center justify-center gap-2 disabled:bg-stone-300"
+                        disabled={isSubmitting || paymentStatus !== 'idle'}
+                        className="flex-1 bg-editorial-ink text-white py-4 text-xs font-bold uppercase tracking-widest hover:bg-editorial-accent transition-colors flex justify-center items-center gap-2"
                       >
-                        {isSubmitting ? (
-                          <>
-                            <Loader2 className="h-3 w-3 animate-spin" />
-                            Recording...
-                          </>
+                        {paymentStatus === 'processing' ? (
+                          <><Loader2 className="h-4 w-4 animate-spin" /> Processing Payment...</>
+                        ) : paymentStatus === 'success' ? (
+                          <><CheckCircle className="h-4 w-4" /> Payment Successful</>
+                        ) : isSubmitting ? (
+                          <><Loader2 className="h-4 w-4 animate-spin" /> Finalizing...</>
                         ) : (
                           'Dispatch Order'
                         )}

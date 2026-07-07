@@ -696,7 +696,7 @@ export const PRODUCTS = [
     reviewsCount: 34,
     style: 'Streetwear',
     tags: ['kids', 'denim', 'jacket', 'blue'],
-    imageUrl: '/images/kids.png',
+    imageUrl: '/images/kids_denim.png',
     description: 'A classic and durable denim jacket tailored for kids, perfect for layering.'
   },
   {
@@ -710,7 +710,7 @@ export const PRODUCTS = [
     reviewsCount: 56,
     style: 'Casual',
     tags: ['kids', 'tee', 'yellow', 'casual'],
-    imageUrl: '/images/kids.png',
+    imageUrl: '/images/kids_tee.png',
     description: 'Soft and comfortable cotton graphic tee for everyday play.'
   }
 ];

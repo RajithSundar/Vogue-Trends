@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingBag, Heart, Sparkles, Search, TrendingUp, User, Shield, Menu, X } from 'lucide-react';
+import { ShoppingBag, Heart, Sparkles, Search, TrendingUp, User, Shield, Menu, X, Package } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function Navbar({
@@ -168,6 +168,17 @@ export default function Navbar({
 
 
 
+          {/* Orders Button (if logged in) */}
+          {user && (
+            <button
+              onClick={() => navigate('/orders')}
+              className={`p-1.5 sm:p-2 transition-colors touch-target ${activeTab === 'orders' ? 'text-editorial-ink' : 'text-stone-600 hover:text-editorial-ink'}`}
+              title="My Orders"
+            >
+              <Package className="h-5 w-5" />
+            </button>
+          )}
+
           {/* Wishlist Button */}
           <button
             onClick={onWishlistClick}
@@ -276,6 +287,14 @@ export default function Navbar({
                 >
                   <TrendingUp className="h-5 w-5" /> Trend Board
                 </button>
+                {user && (
+                  <button
+                    onClick={() => { navigate('/orders'); setIsMobileMenuOpen(false); }}
+                    className={`flex items-center gap-3 px-6 py-4 text-sm font-semibold tracking-wider uppercase transition-colors ${activeTab === 'orders' ? 'bg-stone-100 text-editorial-ink' : 'text-stone-600'}`}
+                  >
+                    <Package className="h-5 w-5" /> My Orders
+                  </button>
+                )}
                 {user?.email === 'user' && (
                   <button
                     onClick={() => { navigate('/admin'); setIsMobileMenuOpen(false); }}

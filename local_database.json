@@ -1303,7 +1303,7 @@
         "jacket",
         "blue"
       ],
-      "imageUrl": "https://images.unsplash.com/photo-1519689680058-324335c77eba?w=600&auto=format&fit=crop&q=80",
+      "imageUrl": "/images/kids_denim.png",
       "description": "A classic and durable denim jacket tailored for kids, perfect for layering."
     },
     {
@@ -1322,7 +1322,7 @@
         "yellow",
         "casual"
       ],
-      "imageUrl": "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=600&auto=format&fit=crop&q=80",
+      "imageUrl": "/images/kids_tee.png",
       "description": "Soft and comfortable cotton graphic tee for everyday play."
     }
   ]

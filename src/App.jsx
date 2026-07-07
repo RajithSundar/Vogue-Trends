@@ -1,7 +1,7 @@
 import { getApiUrl } from './utils/api.js';
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { ShoppingBag, Sparkles, Filter, RefreshCw, X, ChevronDown, Flame, Heart, Info, ArrowRight, Search } from 'lucide-react';
+import { ShoppingBag, Sparkles, Filter, RefreshCw, X, ChevronDown, Flame, Heart, Info, ArrowRight, Search, SlidersHorizontal } from 'lucide-react';
 import Navbar from './components/Navbar.jsx';
 import CategoryCard from './components/CategoryCard.jsx';
 import ProductCard from './components/ProductCard.jsx';
@@ -22,6 +22,7 @@ import { TextReveal } from './components/ui/text-reveal.tsx';
 import SlidingCards from './components/lightswind/SlidingCards.tsx';
 import { CylinderCarousel } from '../components/motion/cylinder-carousel.tsx';
 import { TiltCard } from '../components/motion/tilt-card.tsx';
+import UserOrders from './components/UserOrders.jsx';
 import { motion, AnimatePresence } from 'motion/react';
 
 const CATEGORY_IMAGES = {
@@ -95,6 +96,7 @@ export default function App() {
   const [activeTrend, setActiveTrend] = useState(null);
   const [activeExclusiveTag, setActiveExclusiveTag] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [wishlist, setWishlist] = useState([]);
@@ -259,6 +261,9 @@ export default function App() {
       setActiveExclusiveTag(null);
     } else if (path === '/wishlist') {
       setActiveTab('wishlist');
+      setActiveExclusiveTag(null);
+    } else if (path === '/orders') {
+      setActiveTab('orders');
       setActiveExclusiveTag(null);
     } else {
       setActiveTab('shop');
@@ -462,6 +467,11 @@ export default function App() {
   const availableColors = useMemo(() => {
     const colors = new Set(products.map((p) => p.color));
     return Array.from(colors);
+  }, [products]);
+
+  const availableStyles = useMemo(() => {
+    const styles = new Set(products.map((p) => p.style).filter(Boolean));
+    return Array.from(styles);
   }, [products]);
 
   const filteredProducts = useMemo(() => {
@@ -763,8 +773,92 @@ if (val.trim()) {
                          {selectedCategory === 'All' ? 'All Pieces' : `${selectedCategory} Collection`}
                        </h3>
                      </div>
-                     <span className="text-xs font-mono text-stone-600 uppercase tracking-widest bg-stone-100 px-4 py-2 rounded-full font-semibold">{filteredProducts.length} Items</span>
+                     <div className="flex items-center gap-3">
+                       <button
+                         onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+                         className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-widest transition-all shadow-sm border ${
+                           isFiltersOpen || selectedStyle !== 'All' || selectedColor !== 'All' || maxPrice < 220 
+                           ? 'bg-editorial-ink text-white border-editorial-ink hover:bg-black' 
+                           : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-50'
+                         }`}
+                       >
+                         <SlidersHorizontal className="w-3.5 h-3.5" />
+                         Refine {(selectedStyle !== 'All' || selectedColor !== 'All' || maxPrice < 220) && <span className="bg-white text-editorial-ink w-4 h-4 rounded-full flex items-center justify-center text-[9px] ml-1">!</span>}
+                       </button>
+                       <span className="text-xs font-mono text-stone-600 uppercase tracking-widest bg-stone-100 px-4 py-2.5 rounded-full font-semibold">{filteredProducts.length} Items</span>
+                     </div>
                   </div>
+
+                  <AnimatePresence>
+                    {isFiltersOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                        animate={{ opacity: 1, height: 'auto', marginBottom: 32 }}
+                        exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                        className="overflow-hidden w-full max-w-2xl ml-auto"
+                      >
+                        <div className="bg-[#fcfbf9] border border-stone-200 p-5 rounded-[1.5rem] shadow-sm flex flex-col md:flex-row gap-6">
+                          
+                          <div className="flex-1 space-y-1.5">
+                            <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-stone-500">Color</label>
+                            <div className="relative">
+                              <select 
+                                value={selectedColor} 
+                                onChange={(e) => setSelectedColor(e.target.value)}
+                                className="w-full appearance-none bg-white border border-stone-200 rounded-lg px-4 py-2.5 text-xs font-medium text-stone-700 outline-none focus:border-editorial-ink cursor-pointer"
+                              >
+                                <option value="All">All Colors</option>
+                                {availableColors.map(c => <option key={c} value={c}>{c}</option>)}
+                              </select>
+                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none" />
+                            </div>
+                          </div>
+
+                          <div className="flex-1 space-y-1.5">
+                            <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-stone-500">Vibe / Style</label>
+                            <div className="relative">
+                              <select 
+                                value={selectedStyle} 
+                                onChange={(e) => setSelectedStyle(e.target.value)}
+                                className="w-full appearance-none bg-white border border-stone-200 rounded-lg px-4 py-2.5 text-xs font-medium text-stone-700 outline-none focus:border-editorial-ink cursor-pointer"
+                              >
+                                <option value="All">All Styles</option>
+                                {availableStyles.map(s => <option key={s} value={s}>{s}</option>)}
+                              </select>
+                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none" />
+                            </div>
+                          </div>
+
+                          <div className="flex-[1.5] space-y-3 flex flex-col justify-center">
+                            <div className="flex justify-between items-center">
+                              <label className="text-[10px] font-mono font-bold uppercase tracking-widest text-stone-500">Max Price</label>
+                              <span className="text-[11px] font-bold text-editorial-ink bg-stone-100 px-2 py-0.5 rounded">${maxPrice}</span>
+                            </div>
+                            <input 
+                              type="range" 
+                              min="10" 
+                              max="300" 
+                              step="5"
+                              value={maxPrice} 
+                              onChange={(e) => setMaxPrice(Number(e.target.value))}
+                              className="w-full h-1.5 bg-stone-200 rounded-lg appearance-none cursor-pointer accent-editorial-ink"
+                            />
+                          </div>
+
+                          {(selectedStyle !== 'All' || selectedColor !== 'All' || maxPrice < 220) && (
+                             <div className="flex items-center pt-5 md:pt-0">
+                               <button 
+                                 onClick={resetAllFilters}
+                                 className="text-[9px] uppercase tracking-widest font-bold text-stone-400 hover:text-editorial-ink border-b border-transparent hover:border-editorial-ink transition-colors pb-0.5"
+                               >
+                                 Clear
+                               </button>
+                             </div>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                   
                   {isLoadingProducts ? (
                     <div className="text-center py-24 space-y-3">
@@ -817,6 +911,11 @@ if (val.trim()) {
             toggleWishlist={handleToggleWishlist}
             preferredStyle={preferredStyle}
           />
+        )}
+
+        {/* TAB 8: USER ORDERS / TRACKING */}
+        {activeTab === 'orders' && (
+          <UserOrders token={token} />
         )}
 
         {/* TAB 2: AI STYLIST / PERSONALIZATION DASHBOARD */}
