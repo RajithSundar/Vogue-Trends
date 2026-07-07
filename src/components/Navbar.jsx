@@ -47,7 +47,8 @@ export default function Navbar({
 
   return (
     <>
-      <header className="sticky top-4 sm:top-6 mt-4 sm:mt-6 mb-12 sm:mb-16 z-40 mx-auto w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)] max-w-6xl rounded-[2rem] overflow-hidden bg-white border border-editorial-line premium-shadow glow-bg transition-all duration-500">
+      <div className="h-16 sm:h-20 mt-4 sm:mt-6 mb-12 sm:mb-16" />
+      <header className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)] max-w-6xl rounded-[2rem] overflow-hidden bg-white/85 backdrop-blur-xl border border-editorial-line premium-shadow transition-all duration-500">
         <div className="relative z-10 flex h-16 sm:h-20 w-full items-center justify-between px-6 sm:px-8 lg:px-10">
         
         {/* Hamburger & Logo Group */}

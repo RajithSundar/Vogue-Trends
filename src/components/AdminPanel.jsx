@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Sparkles, TrendingUp, Package, ShoppingBag, Plus, RefreshCw, CheckCircle, Database } from 'lucide-react';
 import { motion } from 'motion/react';
+import { getApiUrl } from '../utils/api.js';
 
 export default function AdminPanel({ token, products, onAddProduct, onUpdateProduct, onDeleteProduct }) {
   const [orders, setOrders] = useState([]);
@@ -32,7 +33,7 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
     setLoadingOrders(true);
     setError('');
     try {
-      const res = await fetch('/api/orders/all', {
+      const res = await fetch(getApiUrl('/api/orders/all'), {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!res.ok) {
@@ -57,7 +58,7 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
     try {
       setError('');
       setSuccess('');
-      const res = await fetch(`/api/orders/${orderId}/status`, {
+      const res = await fetch(getApiUrl(`/api/orders/${orderId}/status`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +83,7 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
   const handleUpdateSubmit = async (id) => {
     setError('');
     try {
-      const res = await fetch(`/api/products/${id}`, {
+      const res = await fetch(getApiUrl(`/api/products/${id}`), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ price: Number(editForm.price), stock: Number(editForm.stock) })
@@ -102,7 +103,7 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
     if (!confirm('Are you sure you want to delete this product?')) return;
     setError('');
     try {
-      const res = await fetch(`/api/products/${id}`, {
+      const res = await fetch(getApiUrl(`/api/products/${id}`), {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -141,7 +142,7 @@ export default function AdminPanel({ token, products, onAddProduct, onUpdateProd
     };
 
     try {
-      const res = await fetch('/api/products', {
+      const res = await fetch(getApiUrl('/api/products'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

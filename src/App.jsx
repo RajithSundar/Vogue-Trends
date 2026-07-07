@@ -1,3 +1,4 @@
+import { getApiUrl } from './utils/api.js';
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { ShoppingBag, Sparkles, Filter, RefreshCw, X, ChevronDown, Flame, Heart, Info, ArrowRight, Search } from 'lucide-react';
@@ -143,7 +144,7 @@ export default function App() {
       const fetchUserAndSync = async () => {
         try {
           // Fetch current verified user
-          const meRes = await fetch('/api/auth/me', {
+          const meRes = await fetch(getApiUrl('/api/auth/me'), {
             headers: { 'Authorization': `Bearer ${token}` }
           });
           
@@ -153,7 +154,7 @@ export default function App() {
             localStorage.setItem('vogue_user', JSON.stringify(userData));
 
             // Sync Cart from Database
-            const cartRes = await fetch('/api/cart', {
+            const cartRes = await fetch(getApiUrl('/api/cart'), {
               headers: { 'Authorization': `Bearer ${token}` }
             });
             if (cartRes.ok) {
@@ -170,7 +171,7 @@ export default function App() {
             }
 
             // Sync Wishlist from Database
-            const wishRes = await fetch('/api/wishlist', {
+            const wishRes = await fetch(getApiUrl('/api/wishlist'), {
               headers: { 'Authorization': `Bearer ${token}` }
             });
             if (wishRes.ok) {
@@ -215,7 +216,7 @@ export default function App() {
     // Fetch products
     const fetchProducts = async () => {
       try {
-        const res = await fetch('/api/products');
+        const res = await fetch(getApiUrl('/api/products'));
         if (res.ok) {
           const data = await res.json();
           setProducts(data);
@@ -255,6 +256,9 @@ export default function App() {
     } else if (path === '/admin') {
       setActiveTab('admin');
       setActiveExclusiveTag(null);
+    } else if (path === '/wishlist') {
+      setActiveTab('wishlist');
+      setActiveExclusiveTag(null);
     } else {
       setActiveTab('shop');
       setActiveExclusiveTag(null);
@@ -287,7 +291,7 @@ export default function App() {
     localStorage.setItem('vogue_cart', JSON.stringify(items));
     if (token) {
       try {
-        await fetch('/api/cart', {
+        await fetch(getApiUrl('/api/cart'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -312,7 +316,7 @@ export default function App() {
     localStorage.setItem('vogue_wishlist', JSON.stringify(ids));
     if (token) {
       try {
-        await fetch('/api/wishlist', {
+        await fetch(getApiUrl('/api/wishlist'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -497,7 +501,7 @@ export default function App() {
   const cartTotalCount = cartItems.reduce((acc, i) => acc + i.quantity, 0);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F9F8F6] relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-[#F9F8F6] relative overflow-clip">
       
       {/* Global Interactive Background */}
       <StarsBackgroundDemo />
@@ -511,8 +515,7 @@ export default function App() {
         cartCount={cartTotalCount}
         wishlistCount={wishlist.length}
 onWishlistClick={() => {
-           setShowWishlistOnly(!showWishlistOnly);
-           if (activeTab !== 'shop') navigate('/');
+           navigate('/wishlist');
          }}
         openCart={() => setIsCartOpen(true)}
         browsingCount={browsingHistory.length}
@@ -547,6 +550,43 @@ setSearchQuery={(val) => {
                    />
                 ))}
              </div>
+          </div>
+        )}
+
+        {/* TAB 6: WISHLIST PAGE */}
+        {activeTab === 'wishlist' && (
+          <div className="space-y-8 min-h-[60vh] flex flex-col py-12 w-full max-w-6xl mx-auto z-20 relative">
+             <div className="text-center mb-8">
+               <h2 className="text-4xl md:text-5xl font-serif font-bold text-editorial-ink">Your Wishlist</h2>
+               <p className="text-editorial-muted mt-4">Curated pieces you love.</p>
+             </div>
+             
+             {wishlist.length === 0 ? (
+               <div className="text-center py-20 bg-white rounded-[2rem] border border-stone-200/50 shadow-sm max-w-2xl mx-auto w-full">
+                 <p className="text-sm font-semibold text-stone-700">Your wishlist is currently empty.</p>
+                 <button
+                   onClick={() => navigate('/')}
+                   className="mt-6 rounded-full bg-editorial-ink px-8 py-4 text-xs font-bold text-white uppercase tracking-widest hover:bg-black transition-colors"
+                 >
+                   Explore the Catalogue
+                 </button>
+               </div>
+             ) : (
+               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 bg-white border border-editorial-line p-6 sm:p-8 md:p-12 rounded-[2rem] premium-shadow glow-bg">
+                 <AnimatePresence>
+                   {products.filter(p => wishlist.includes(p.id)).map((p) => (
+                     <ProductCard
+                        key={p.id}
+                        product={p}
+                        onViewDetails={setSelectedProduct}
+                        isWishlisted={true}
+                        toggleWishlist={handleToggleWishlist}
+                        preferredStyle={preferredStyle}
+                     />
+                   ))}
+                 </AnimatePresence>
+               </div>
+             )}
           </div>
         )}
 

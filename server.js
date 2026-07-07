@@ -1,6 +1,7 @@
 import './server/config/env.js'; // Must be first to load env vars before routing imports
 import express from 'express';
 import path from 'path';
+import cors from 'cors';
 
 // Configurations & Imports
 import { connectDatabase, isUsingMongoDB } from './server/config/db.js';
@@ -16,6 +17,7 @@ import productRoutes from './server/routes/productRoutes.js';
 const app = express();
 const PORT = 3000;
 
+app.use(cors());
 app.use(express.json());
 
 // Initialize Database connection promise
@@ -40,14 +42,7 @@ app.get('/api/db-status', (req, res) => {
   res.json({ isUsingMongoDB });
 });
 
-// Setup Production SPA serving synchronously so Vercel can resolve routes immediately
-if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
-  const distPath = path.join(process.cwd(), 'dist');
-  app.use(express.static(distPath));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(distPath, 'index.html'));
-  });
-}
+// Static file serving removed: Backend now acts exclusively as an API for decoupled frontend
 
 // Setup Dev Server and start listening
 async function startDevServer() {

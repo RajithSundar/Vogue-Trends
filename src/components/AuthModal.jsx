@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Lock, Mail, User, LogOut, CheckCircle, Database, Package, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { getApiUrl } from '../utils/api.js';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '877550687165-usg5oc9bgvuptq00mepcn17ge3q36ujv.apps.googleusercontent.com';
 
@@ -23,7 +24,7 @@ export default function AuthModal({ isOpen, onClose, token, user, onLogin, onLog
     // Fetch DB Status
     const fetchDbStatus = async () => {
       try {
-        const res = await fetch('/api/db-status');
+        const res = await fetch(getApiUrl('/api/db-status'));
         if (res.ok) {
           const data = await res.json();
           setDbStatus(data);
@@ -39,7 +40,7 @@ export default function AuthModal({ isOpen, onClose, token, user, onLogin, onLog
     if (token) {
       const fetchOrders = async () => {
         try {
-          const res = await fetch('/api/orders', {
+          const res = await fetch(getApiUrl('/api/orders'), {
             headers: { 'Authorization': `Bearer ${token}` }
           });
           if (res.ok) {
@@ -66,7 +67,7 @@ export default function AuthModal({ isOpen, onClose, token, user, onLogin, onLog
     const body = activeTab === 'login' ? { email, password } : { email, password, name };
 
     try {
-      const res = await fetch(url, {
+      const res = await fetch(getApiUrl(url), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
@@ -113,7 +114,7 @@ export default function AuthModal({ isOpen, onClose, token, user, onLogin, onLog
     setSuccess('');
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/google', {
+      const res = await fetch(getApiUrl('/api/auth/google'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: credentialResponse.credential })

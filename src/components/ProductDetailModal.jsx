@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Heart, Star, Sparkles, ShoppingBag, Send, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence, useDragControls } from 'motion/react';
+import { getApiUrl } from '../utils/api.js';
 
 export default function ProductDetailModal({
   product,
@@ -30,7 +31,7 @@ export default function ProductDetailModal({
   const fetchReviews = async () => {
     if (!product) return;
     try {
-      const res = await fetch(`/api/reviews/${product.id}`);
+      const res = await fetch(getApiUrl(`/api/reviews/${product.id}`));
       if (res.ok) {
         const data = await res.json();
         setReviews(data);
@@ -76,7 +77,7 @@ export default function ProductDetailModal({
         headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const res = await fetch('/api/reviews', {
+      const res = await fetch(getApiUrl('/api/reviews'), {
         method: 'POST',
         headers,
         body: JSON.stringify({

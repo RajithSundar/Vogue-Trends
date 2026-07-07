@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Sparkles, Compass, Shirt, Palette, RefreshCw, ShoppingCart, Check, HelpCircle, Flame, Send, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { getApiUrl } from '../utils/api.js';
 
 // Helper to format bold text: **bold** -> <strong>
 const formatBoldText = (text) => {
@@ -133,7 +134,7 @@ Here are some ideas to start:
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/personalize', {
+      const response = await fetch(getApiUrl('/api/personalize'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ browsingHistory }),
@@ -187,7 +188,7 @@ Here are some ideas to start:
     setChatLoading(true);
 
     try {
-      const response = await fetch('/api/personalize/chat', {
+      const response = await fetch(getApiUrl('/api/personalize/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

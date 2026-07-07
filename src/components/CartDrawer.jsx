@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, ShoppingBag, Trash2, ChevronRight, Loader2, Database, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { getApiUrl } from '../utils/api.js';
 
 export default function CartDrawer({
   isOpen,
@@ -94,7 +95,7 @@ export default function CartDrawer({
 
     if (token) {
       try {
-        const res = await fetch('/api/orders', {
+        const res = await fetch(getApiUrl('/api/orders'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

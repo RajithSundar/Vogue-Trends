@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Lock, Sparkles, CheckCircle2 } from "lucide-react";
 import ProductCard from "./ProductCard";
+import { getApiUrl } from '../utils/api.js';
 
 export default function CollectionTab({
   activeTag,
@@ -36,7 +37,7 @@ export default function CollectionTab({
       setIsLoadingCollection(true);
 
       try {
-        const res = await fetch(requestUrl);
+        const res = await fetch(getApiUrl(requestUrl));
         const data = await res.json();
 
         console.log("[CollectionTab] backend response:", {
@@ -69,7 +70,7 @@ export default function CollectionTab({
     setIsSubscribing(true);
     setError("");
     try {
-      const res = await fetch("/api/auth/subscribe", {
+      const res = await fetch(getApiUrl("/api/auth/subscribe"), {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
