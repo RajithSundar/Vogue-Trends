@@ -31,7 +31,7 @@ const CATEGORY_IMAGES = {
   'Outerwear': 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80',
   'Footwear': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80',
   'Accessories': 'https://images.unsplash.com/photo-1509319117193-57bab727e09d?w=600&q=80',
-  'Kids': 'https://images.unsplash.com/photo-1514090259021-bc13b91a9df2?w=600&q=80'
+  'Kids': '/images/kids.png'
 };
 
 const categoryItems = [
@@ -92,6 +92,7 @@ export default function App() {
 
   // Navigation & Cart States
   const [activeTab, setActiveTab] = useState('shop');
+  const [activeTrend, setActiveTrend] = useState(null);
   const [activeExclusiveTag, setActiveExclusiveTag] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
@@ -755,7 +756,7 @@ if (val.trim()) {
                 <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 mt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-4 border-b border-editorial-line gap-4">
                      <div>
-                       <button onClick={() => setSelectedCategory(null)} className="text-xs font-mono text-stone-500 hover:text-editorial-ink uppercase tracking-widest mb-2 flex items-center gap-1 transition-colors group">
+                       <button onClick={() => setSelectedCategory(null)} className="inline-flex items-center justify-center gap-2 rounded-full border border-stone-200 bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-stone-700 hover:bg-stone-50 hover:text-editorial-ink hover:border-stone-300 transition-all shadow-sm mb-4 group">
                           <span className="group-hover:-translate-x-1 transition-transform">&larr;</span> Back to Categories
                        </button>
                        <h3 className="font-serif text-3xl md:text-4xl font-bold text-editorial-ink tracking-tight">
@@ -834,9 +835,43 @@ if (val.trim()) {
         {/* TAB 3: TREND BOARD & COLOR THEORIES */}
         {activeTab === 'trends' && (
           <TrendSection
-            onSelectTrendStyle={handleSelectTrendStyle}
+            onSelectTrendStyle={(trend) => {
+              setActiveTrend(trend);
+              setActiveTab('trend-details');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
             setActiveTab={setActiveTab}
           />
+        )}
+
+        {/* TAB 3.5: TREND DETAILS */}
+        {activeTab === 'trend-details' && activeTrend && (
+          <div className="space-y-8 py-12 w-full max-w-6xl mx-auto z-20 relative">
+             <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-4 border-b border-editorial-line gap-4">
+                 <div>
+                   <button onClick={() => setActiveTab('trends')} className="inline-flex items-center justify-center gap-2 rounded-full border border-stone-200 bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-stone-700 hover:bg-stone-50 hover:text-editorial-ink hover:border-stone-300 transition-all shadow-sm mb-4 group">
+                      <span className="group-hover:-translate-x-1 transition-transform">&larr;</span> Back to Trends
+                   </button>
+                   <h3 className="font-serif text-3xl md:text-4xl font-bold text-editorial-ink tracking-tight">
+                     {activeTrend?.name} Collection
+                   </h3>
+                 </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 bg-white border border-editorial-line p-6 sm:p-8 md:p-12 rounded-[2rem] premium-shadow glow-bg">
+                <AnimatePresence>
+                  {products.filter(p => p.style === activeTrend?.vibe).map((p) => (
+                    <ProductCard
+                       key={p.id}
+                       product={p}
+                       onViewDetails={setSelectedProduct}
+                       isWishlisted={wishlist.includes(p.id)}
+                       toggleWishlist={handleToggleWishlist}
+                       preferredStyle={preferredStyle}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
+          </div>
         )}
 
         {/* TAB 4: ADMIN PORTAL */}

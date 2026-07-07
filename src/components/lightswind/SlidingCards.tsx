@@ -170,7 +170,7 @@ const SlidingCards: React.FC<SlidingCardsProps> = ({
           key={id}
           onClick={() => onCardClick?.(index)}
           className={cn(
-            "card absolute inset-4 flex flex-col p-3 rounded-[2rem] border border-stone-200 premium-shadow cursor-grab transition-transform ease-in-out",
+            "card absolute inset-4 flex flex-col p-3 rounded-[2rem] border border-stone-200 premium-shadow cursor-pointer active:cursor-grabbing transition-transform ease-in-out",
             bgClass
           )}
         >

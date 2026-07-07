@@ -530,7 +530,7 @@
         "accessory",
         "red"
       ],
-      "imageUrl": "https://images.unsplash.com/photo-1576871337622-98d48d435350?w=600&auto=format&fit=crop&q=80",
+      "imageUrl": "https://images.unsplash.com/photo-1596207142079-6617a7a5d3f6?w=600&auto=format&fit=crop&q=80",
       "description": "Finely spun merino wool knit beanie. Standard fold-up design that sits cleanly, delivering high breathability and reliable warmth.",
       "_id": "prod-16",
       "stock": 100
@@ -980,7 +980,7 @@
         "accessory",
         "cardholder"
       ],
-      "imageUrl": "https://images.unsplash.com/photo-1627124118303-624c89432f82?w=600&auto=format&fit=crop&q=80",
+      "imageUrl": "https://images.unsplash.com/photo-1628151015968-3a4429e9ef04?w=600&auto=format&fit=crop&q=80",
       "description": "A bi-fold cardholder wallet crafted from premium scratch-resistant full-grain pebble leather.",
       "_id": "prod-35",
       "stock": 100
@@ -1198,7 +1198,7 @@
         "knit",
         "New Arrivals"
       ],
-      "imageUrl": "https://images.unsplash.com/photo-1620012253295-c15bc3e653e3?w=600&auto=format&fit=crop&q=80",
+      "imageUrl": "https://images.unsplash.com/photo-1574634534894-89d7576c8259?w=600&auto=format&fit=crop&q=80",
       "description": "Our newest arrival: a featherlight cashmere-silk blend polo shirt featuring a seamless collar and ribbed cuffs.",
       "_id": "prod-45",
       "stock": 100
@@ -1286,6 +1286,44 @@
       "description": "Bench-made oxblood Chelsea boots available only to members. Features hand-painted patina and Goodyear welt construction.",
       "_id": "prod-49",
       "stock": 100
+    },
+    {
+      "id": "prod-50",
+      "name": "Kids Denim Jacket",
+      "category": "Kids",
+      "price": 45,
+      "color": "Classic Blue",
+      "colorCode": "#0f52ba",
+      "rating": 4.8,
+      "reviewsCount": 34,
+      "style": "Streetwear",
+      "tags": [
+        "kids",
+        "denim",
+        "jacket",
+        "blue"
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1519689680058-324335c77eba?w=600&auto=format&fit=crop&q=80",
+      "description": "A classic and durable denim jacket tailored for kids, perfect for layering."
+    },
+    {
+      "id": "prod-51",
+      "name": "Kids Graphic Tee",
+      "category": "Kids",
+      "price": 25,
+      "color": "Sunny Yellow",
+      "colorCode": "#ffeb3b",
+      "rating": 4.9,
+      "reviewsCount": 56,
+      "style": "Casual",
+      "tags": [
+        "kids",
+        "tee",
+        "yellow",
+        "casual"
+      ],
+      "imageUrl": "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=600&auto=format&fit=crop&q=80",
+      "description": "Soft and comfortable cotton graphic tee for everyday play."
     }
   ]
 }

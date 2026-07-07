@@ -49,9 +49,8 @@ const TRENDS = [
 
 export default function TrendSection({ onSelectTrendStyle, setActiveTab }) {
   
-  const handleBrowseTrend = (vibe) => {
-    onSelectTrendStyle(vibe);
-    setActiveTab('shop');
+  const handleBrowseTrend = (trend) => {
+    onSelectTrendStyle(trend);
   };
 
   return (
@@ -81,7 +80,8 @@ export default function TrendSection({ onSelectTrendStyle, setActiveTab }) {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
               key={trend.id}
-              className={`flex flex-col xl:flex-row gap-8 items-center bg-[#F9F8F6] p-6 sm:p-8 rounded-none border border-editorial-line hover:bg-white transition-colors duration-300 ${
+              onClick={() => handleBrowseTrend(trend)}
+              className={`flex flex-col xl:flex-row gap-8 items-center bg-[#F9F8F6] p-6 sm:p-8 rounded-none border border-editorial-line hover:bg-white transition-colors duration-300 cursor-pointer ${
                 isEven ? 'xl:flex-row' : 'xl:flex-row-reverse'
               }`}
             >
@@ -135,7 +135,7 @@ export default function TrendSection({ onSelectTrendStyle, setActiveTab }) {
                 {/* Call to action */}
                 <div className="pt-2">
                   <button
-                    onClick={() => handleBrowseTrend(trend.vibe)}
+                    onClick={(e) => { e.stopPropagation(); handleBrowseTrend(trend); }}
                     className="inline-flex items-center justify-center gap-2 rounded-none bg-editorial-ink px-5 py-3 min-h-[44px] text-xs font-bold tracking-widest uppercase text-white hover:bg-editorial-accent transition-colors"
                   >
                     Browse Coordinated Range
