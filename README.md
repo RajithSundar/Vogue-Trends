@@ -252,3 +252,17 @@ For production deployments:
 # 📄 License
 
 This project is intended for educational and portfolio purposes.
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome! If you would like to improve the project, please follow these steps:
+
+1. Fork or clone the repository.
+2. Create a new feature branch.
+3. Commit your changes with a meaningful message.
+4. Push the branch to GitHub.
+5. Create a Pull Request for review.
+
+Please ensure your code follows the existing project structure and coding standards.
