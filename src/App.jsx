@@ -21,6 +21,8 @@ import { StarsBackgroundDemo } from './components/ui/background.tsx';
 import { TextReveal } from './components/ui/text-reveal.tsx';
 import SlidingCards from './components/lightswind/SlidingCards.tsx';
 import { CylinderCarousel } from '../components/motion/cylinder-carousel.tsx';
+import { AIResponseTyping } from './components/ui/AIResponseTyping';
+import CyberHoverCard from './components/CyberHoverCard.jsx';
 import { TiltCard } from '../components/motion/tilt-card.tsx';
 import UserOrders from './components/UserOrders.jsx';
 import { motion, AnimatePresence } from 'motion/react';
@@ -32,7 +34,7 @@ const CATEGORY_IMAGES = {
   'Outerwear': 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80',
   'Footwear': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80',
   'Accessories': 'https://images.unsplash.com/photo-1509319117193-57bab727e09d?w=600&q=80',
-  'Kids': '/images/kids.png'
+  'Kids': 'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=600&q=80'
 };
 
 const categoryItems = [
@@ -619,36 +621,22 @@ setSearchQuery={(val) => {
                     <div onClick={() => {
                       navigate('/stylist');
                       setTriggerChatScroll(prev => prev + 1);
-                    }} className="cursor-pointer mb-8">
+                    }} className="cursor-pointer mb-6">
                       <TextReveal text="CONSULT AI STYLIST." stagger={0.08} delay={1.2} className="text-4xl md:text-6xl font-serif italic text-editorial-ink font-bold text-center drop-shadow-sm tracking-tighter group-hover:scale-105 transition-transform duration-500" />
                     </div>
                     
-                    <div className="w-full max-w-lg relative group/input">
-                      <input 
-                        type="text" 
-                        placeholder="What should I wear for..." 
-                        onKeyDown={(e) => {
-if (e.key === 'Enter' && e.target.value.trim()) {
-                               setInitialStylistQuery(e.target.value);
-                               navigate('/stylist');
-                               setTriggerChatScroll(prev => prev + 1);
-                           }
-                        }}
-                         className="w-full px-8 py-4 rounded-full bg-stone-50 border-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.06)] outline-none focus:bg-white focus:shadow-[inset_0_1px_2px_rgba(0,0,0,0.03),_0_4px_12px_rgba(0,0,0,0.05)] text-editorial-ink placeholder:text-stone-400 font-sans transition-all pr-14 text-sm md:text-base"
-                      />
-                      <button 
-                        onClick={(e) => {
-                          const val = e.currentTarget.previousSibling.value;
-if (val.trim()) {
-                             setInitialStylistQuery(val);
-                             navigate('/stylist');
-                             setTriggerChatScroll(prev => prev + 1);
-                          }
-                        }}
-                        className="absolute right-2 top-2 bottom-2 aspect-square bg-editorial-ink text-white rounded-full flex items-center justify-center hover:bg-editorial-accent transition-colors shadow-sm"
-                      >
-                        &rarr;
-                      </button>
+                    <div 
+                      onClick={() => {
+                         navigate('/stylist');
+                         setTriggerChatScroll(prev => prev + 1);
+                      }}
+                      className="w-full max-w-lg relative z-20 cursor-pointer group transform hover:scale-[1.02] transition-transform duration-300"
+                    >
+                       <AIResponseTyping 
+                          text="What should I wear for a summer evening dinner in the city?"
+                          speed={40}
+                          thinkingState="typing"
+                       />
                     </div>
                   </div>
               </div>
@@ -715,16 +703,16 @@ if (val.trim()) {
                          <div 
                            key={cat}
                            onClick={() => setSelectedCategory(cat)}
-                           className="snap-center flex-shrink-0 w-[180px] h-[260px] cursor-pointer rounded-[2rem] transition-all duration-300 border border-[#e5e5e5] bg-white relative group hover:border-editorial-ink/30 premium-shadow"
+                           className="snap-center flex-shrink-0 w-[180px] h-[260px] cursor-pointer"
                          >
-                            <div className="absolute inset-0 rounded-[2rem] overflow-hidden">
+                           <CyberHoverCard className="w-full h-full">
                               <img src={CATEGORY_IMAGES[cat]} alt={cat} className="absolute inset-0 w-full h-full object-cover brightness-[0.85] contrast-[1.1] transition-all duration-500 group-hover:brightness-[0.95]" />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity duration-500 group-hover:opacity-90"></div>
                               <div className="absolute inset-0 z-10 p-4 flex flex-col items-center justify-center">
                                 <h3 className="font-serif text-xl font-bold text-white drop-shadow-md tracking-wide text-center leading-tight">{cat}</h3>
                                 <p className="text-[9px] uppercase tracking-widest mt-2 text-white/90 font-mono drop-shadow-sm font-semibold text-center">View {cat === 'All' ? 'Everything' : 'Collection'}</p>
                               </div>
-                            </div>
+                           </CyberHoverCard>
                          </div>
                        ))}
                       </div>
@@ -745,16 +733,16 @@ if (val.trim()) {
                            <div 
                              key={cat} 
                              onPointerDownCapture={() => setSelectedCategory(cat)}
-                             className="w-[220px] h-[320px] mx-auto cursor-pointer rounded-[2rem] transition-all duration-300 border border-[#e5e5e5] bg-white relative group hover:border-editorial-ink/30 premium-shadow"
+                             className="w-[220px] h-[320px] mx-auto cursor-pointer"
                            >
-                              <div className="absolute inset-0 rounded-[2rem] overflow-hidden">
+                             <CyberHoverCard className="w-full h-full">
                                 <img src={CATEGORY_IMAGES[cat]} alt={cat} className="absolute inset-0 w-full h-full object-cover brightness-[0.85] contrast-[1.1] transition-all duration-500 group-hover:brightness-[0.95]" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity duration-500 group-hover:opacity-90"></div>
                                 <div className="absolute inset-0 z-10 p-6 flex flex-col items-center justify-center">
                                   <h3 className="font-serif text-2xl md:text-3xl font-bold text-white drop-shadow-md tracking-wide text-center leading-tight">{cat}</h3>
                                   <p className="text-[10px] uppercase tracking-widest mt-3 text-white/90 font-mono drop-shadow-sm font-semibold text-center">View {cat === 'All' ? 'Everything' : 'Collection'}</p>
                                 </div>
-                              </div>
+                             </CyberHoverCard>
                            </div>
                          ))}
                       </CylinderCarousel>
@@ -975,13 +963,23 @@ if (val.trim()) {
 
         {/* TAB 4: ADMIN PORTAL */}
         {activeTab === 'admin' && (
-          <AdminPanel
-            token={token}
-            products={products}
-            onAddProduct={handleAddProduct}
-            onUpdateProduct={handleUpdateProduct}
-            onDeleteProduct={handleDeleteProduct}
-          />
+          user?.role === 'admin' ? (
+            <AdminPanel
+              token={token}
+              products={products}
+              onAddProduct={handleAddProduct}
+              onUpdateProduct={handleUpdateProduct}
+              onDeleteProduct={handleDeleteProduct}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center min-h-[60vh] py-12">
+               <h2 className="text-4xl font-serif font-bold text-editorial-ink mb-4">Access Denied</h2>
+               <p className="text-stone-500 mb-8">You must be an administrator to view this page.</p>
+               <AnimatedButton onClick={() => { setActiveTab('shop'); navigate('/'); }} variant="dark" icon="arrow">
+                 Return to Store
+               </AnimatedButton>
+            </div>
+          )
         )}
 
       </main>

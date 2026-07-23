@@ -5,7 +5,8 @@ const UserSchema = new mongoose.Schema({
   passwordHash: { type: String, required: true },
   name: { type: String, required: true },
   preferredStyle: { type: String },
-  isMember: { type: Boolean, default: false }
+  isMember: { type: Boolean, default: false },
+  role: { type: String, enum: ['user', 'admin'], default: 'user' }
 });
 
 export default mongoose.models.User || mongoose.model('User', UserSchema);

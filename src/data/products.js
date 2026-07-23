@@ -220,7 +220,7 @@ export const PRODUCTS = [
     reviewsCount: 180,
     style: 'Minimalist',
     tags: ['beanie', 'wool', 'merino', 'burgundy', 'hat', 'accessory', 'red'],
-    imageUrl: '/images/beanie.png',
+    imageUrl: 'https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=600&auto=format&fit=crop&q=80',
     description: 'Finely spun merino wool knit beanie. Standard fold-up design that sits cleanly, delivering high breathability and reliable warmth.'
   },
   {
@@ -486,7 +486,7 @@ export const PRODUCTS = [
     reviewsCount: 82,
     style: 'Minimalist',
     tags: ['wallet', 'leather', 'black', 'accessory', 'cardholder'],
-    imageUrl: '/images/wallet.png',
+    imageUrl: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=600&auto=format&fit=crop&q=80',
     description: 'A bi-fold cardholder wallet crafted from premium scratch-resistant full-grain pebble leather.'
   },
   {
@@ -626,7 +626,7 @@ export const PRODUCTS = [
     reviewsCount: 8,
     style: 'Minimalist',
     tags: ['polo', 'cashmere', 'knit', 'New Arrivals'],
-    imageUrl: '/images/polo.png',
+    imageUrl: 'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=600&auto=format&fit=crop&q=80',
     description: 'Our newest arrival: a featherlight cashmere-silk blend polo shirt featuring a seamless collar and ribbed cuffs.'
   },
   {
@@ -696,7 +696,7 @@ export const PRODUCTS = [
     reviewsCount: 34,
     style: 'Streetwear',
     tags: ['kids', 'denim', 'jacket', 'blue'],
-    imageUrl: '/images/kids_denim.png',
+    imageUrl: 'https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=600&auto=format&fit=crop&q=80',
     description: 'A classic and durable denim jacket tailored for kids, perfect for layering.'
   },
   {
@@ -710,7 +710,7 @@ export const PRODUCTS = [
     reviewsCount: 56,
     style: 'Casual',
     tags: ['kids', 'tee', 'yellow', 'casual'],
-    imageUrl: '/images/kids_tee.png',
+    imageUrl: 'https://images.unsplash.com/photo-1519241047957-be31d7379a5d?w=600&auto=format&fit=crop&q=80',
     description: 'Soft and comfortable cotton graphic tee for everyday play.'
   }
 ];

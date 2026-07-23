@@ -146,23 +146,7 @@ export default function Navbar({
         {/* Action icons & AI Status */}
         <div className="flex items-center gap-1 sm:gap-4">
           
-          {/* AI engine feedback pill */}
-          <div className="flex flex-col items-end hidden xl:flex">
-            <div className="flex items-center gap-1.5">
-              <span className={`text-[9px] font-mono tracking-widest uppercase px-2.5 py-1 font-semibold ${
-                browsingCount === 0 
-                  ? 'bg-stone-200 text-stone-700' 
-                  : 'bg-editorial-ink text-white'
-              }`}>
-                {status.label}
-              </span>
-            </div>
-            {browsingCount > 0 && (
-              <span className="text-[9px] text-editorial-muted mt-0.5 font-mono">
-                Learning progress: {status.percentage}%
-              </span>
-            )}
-          </div>
+          {/* AI engine feedback pill removed per request */}
 
           {/* Removed Mobile Trend, Stylist, Admin icons here since they are in drawer */}
 

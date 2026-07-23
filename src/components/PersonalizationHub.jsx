@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Sparkles, Compass, Shirt, Palette, RefreshCw, ShoppingCart, Check, HelpCircle, Flame, Send, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { getApiUrl } from '../utils/api.js';
+import { AIResponseTyping } from './ui/AIResponseTyping';
 
 // Helper to format bold text: **bold** -> <strong>
 const formatBoldText = (text) => {
@@ -692,16 +693,17 @@ Here are some ideas to start:
                       }`}
                     >
                       <div
-                        className={`p-3.5 rounded-none text-xs leading-relaxed shadow-sm font-sans ${
-                          msg.role === 'user'
-                            ? 'bg-editorial-ink text-white'
-                            : 'bg-white text-editorial-ink border border-editorial-line'
-                        }`}
+                        className={msg.role === 'user'
+                            ? 'bg-editorial-ink text-white p-3.5 text-xs leading-relaxed shadow-sm font-sans'
+                            : 'w-full'
+                        }
                       >
                         {msg.role === 'assistant' ? (
-                          <div className="space-y-1">
-                            {parseMarkdown(msg.content)}
-                          </div>
+                          <AIResponseTyping
+                             text={msg.content}
+                             thinkingState={idx === messages.length - 1 ? "typing" : "idle"}
+                             speed={20}
+                          />
                         ) : (
                           <p>{msg.content}</p>
                         )}
@@ -745,13 +747,15 @@ Here are some ideas to start:
                     </motion.div>
                   ))}
 
-                  {/* LOADING DOTS */}
+                  {/* LOADING STATE USING AIResponseTyping */}
                   {chatLoading && (
-                    <div className="flex items-center gap-1.5 bg-white border border-editorial-line px-4 py-3 mr-auto max-w-[80px] justify-center rounded-none shadow-sm">
-                      <div className="h-1.5 w-1.5 bg-editorial-ink rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <div className="h-1.5 w-1.5 bg-editorial-ink rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <div className="h-1.5 w-1.5 bg-editorial-ink rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                    </div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex flex-col max-w-[85%] mr-auto items-start"
+                    >
+                      <AIResponseTyping thinkingState="thinking" />
+                    </motion.div>
                   )}
                 </div>
 

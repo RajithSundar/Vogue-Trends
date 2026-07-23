@@ -18,3 +18,13 @@ export function authenticateToken(req, res, next) {
     next();
   });
 }
+
+export function requireAdmin(req, res, next) {
+  authenticateToken(req, res, () => {
+    if (req.user && req.user.role === 'admin') {
+      next();
+    } else {
+      res.status(403).json({ message: 'Access denied: Admins only' });
+    }
+  });
+}

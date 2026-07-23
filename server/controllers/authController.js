@@ -33,7 +33,7 @@ export async function register(req, res) {
       isMember: false
     });
 
-    const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ id: user._id, email: user.email, name: user.name, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
 
     res.status(201).json({
       token,
@@ -42,7 +42,8 @@ export async function register(req, res) {
         email: user.email,
         name: user.name,
         preferredStyle: user.preferredStyle,
-        isMember: user.isMember
+        isMember: user.isMember,
+        role: user.role
       }
     });
   } catch (error) {
@@ -68,7 +69,7 @@ export async function login(req, res) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ id: user._id, email: user.email, name: user.name, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
 
     res.json({
       token,
@@ -77,7 +78,8 @@ export async function login(req, res) {
         email: user.email,
         name: user.name,
         preferredStyle: user.preferredStyle,
-        isMember: user.isMember
+        isMember: user.isMember,
+        role: user.role
       }
     });
   } catch (error) {
@@ -112,7 +114,7 @@ export async function googleLogin(req, res) {
       });
     }
 
-    const token = jwt.sign({ id: user._id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ id: user._id, email: user.email, name: user.name, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
 
     res.json({
       token,
@@ -121,7 +123,8 @@ export async function googleLogin(req, res) {
         email: user.email,
         name: user.name,
         preferredStyle: user.preferredStyle,
-        isMember: user.isMember
+        isMember: user.isMember,
+        role: user.role
       }
     });
   } catch (error) {
@@ -141,7 +144,8 @@ export async function getMe(req, res) {
       email: user.email,
       name: user.name,
       preferredStyle: user.preferredStyle,
-      isMember: user.isMember
+      isMember: user.isMember,
+      role: user.role
     });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
@@ -165,7 +169,8 @@ export async function subscribe(req, res) {
         email: user.email,
         name: user.name,
         preferredStyle: user.preferredStyle,
-        isMember: true
+        isMember: true,
+        role: user.role
       }
     });
   } catch (error) {
