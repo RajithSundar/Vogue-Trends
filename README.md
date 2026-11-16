@@ -1,5 +1,7 @@
 # 👗 Vogue Trends
 
+**🌐 Live Demo:** [https://vogue-trends.vercel.app/](https://vogue-trends.vercel.app/)
+
 An AI-powered fashion e-commerce platform built with the **MERN Stack** that delivers personalized shopping experiences through an intelligent styling assistant, outfit recommendations, and a modern admin dashboard.
 
 ---
